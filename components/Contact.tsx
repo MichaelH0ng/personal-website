@@ -167,7 +167,7 @@ export default function Contact() {
               </div>
               <div className="flex-1">
                 <p className="text-xs text-green-400/60 mb-0.5 font-medium uppercase tracking-wider">Instagram</p>
-                <p className="text-white group-hover:text-green-400 transition-colors font-semibold">michaelhong170</p>
+                <p className="text-white group-hover:text-green-400 transition-colors font-semibold">michael.honggg</p>
               </div>
               <svg className="w-5 h-5 text-gray-500 group-hover:text-green-400 transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

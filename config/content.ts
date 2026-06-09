@@ -4,7 +4,7 @@ export const content = {
     "Business Administration Major with a concentration in Information Systems and a Minor in Music. I'd love to combine my business expertise with my passion for music to make a meaningful impact working in music technology.",
   email: "michaelhonggsq@gmail.com",
   linkedin: "https://www.linkedin.com/in/michaelhong170/",
-  instagram: "https://www.instagram.com/michaelhong170/",
+  instagram: "https://www.instagram.com/michael.honggg/",
 
   about: {
     bio: "My name is Michael Hong and I'm a third year business student at Cal Poly! I'm from Dublin, California (Bay Area) and I'd love to work in the music industry when I'm older, more specifically music technology. I will be interning at Protiviti in San Francisco this summer as a technology consulting intern, and in my free time I like to go to the gym, play music, and go on spontaneous adventures!",
