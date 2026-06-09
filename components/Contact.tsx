@@ -20,7 +20,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="relative flex-1 flex items-center min-h-screen overflow-hidden"
+      className="relative flex-1 flex items-start md:items-center min-h-screen overflow-hidden"
       onMouseMove={handleMouseMove}
     >
 
@@ -38,13 +38,13 @@ export default function Contact() {
         }}
       />
 
-      <div className="relative max-w-6xl mx-auto px-6 py-24 w-full z-10">
+      <div className="relative max-w-6xl mx-auto px-6 py-12 md:py-24 w-full z-10">
 
         {/* Heading area */}
         <div className="mb-8">
           <div className="mb-6" role="heading" aria-level={1}>
             <motion.p
-              className="text-5xl md:text-6xl font-bold leading-tight"
+              className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight"
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
@@ -52,7 +52,7 @@ export default function Contact() {
               <ShinyText text="Let's" color="#ffffff" shineColor="#4ade80" speed={4} direction="left" />
             </motion.p>
             <motion.p
-              className="text-5xl md:text-6xl font-bold leading-tight"
+              className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight"
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
@@ -119,7 +119,7 @@ export default function Contact() {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-xs text-green-400/60 mb-0.5 font-medium uppercase tracking-wider">Email</p>
-                <p className="text-white group-hover:text-green-400 transition-colors font-semibold truncate">{content.email}</p>
+                <p className="text-white group-hover:text-green-400 transition-colors font-semibold break-all text-sm sm:text-base">{content.email}</p>
               </div>
               <svg className="w-5 h-5 text-gray-500 group-hover:text-green-400 transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
