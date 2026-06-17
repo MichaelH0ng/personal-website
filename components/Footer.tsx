@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { content } from "@/config/content";
+import FuzzyText from "@/components/FuzzyText";
 
 const quickLinks = [
   { label: "Home", href: "/" },
@@ -16,9 +17,17 @@ export default function Footer() {
 
           {/* Left — Name + bio + location */}
           <div>
-            <p className="text-2xl font-bold bg-gradient-to-r from-green-400 to-green-300 bg-clip-text text-transparent mb-3">
+            <FuzzyText
+              fontSize={24}
+              fontWeight={700}
+              gradient={["#4ade80", "#86efac"]}
+              baseIntensity={0.08}
+              hoverIntensity={0.4}
+              fuzzRange={20}
+              className="mb-3 block -ml-[47px]"
+            >
               {content.name}
-            </p>
+            </FuzzyText>
             <p className="text-gray-300 text-base leading-relaxed mb-4 max-w-xs">
               Business Administration Major with a concentration in Information Systems and a Minor in Music.
             </p>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { content } from "@/config/content";
@@ -22,16 +22,6 @@ const accents: Record<string, Accent> = {
   Education:                  { border: "border-l-green-500", hover: "hover:bg-green-700/20" },
   "Work Experience":          { border: "border-l-green-500", hover: "hover:bg-green-700/20" },
   "Leadership & Involvement": { border: "border-l-green-500", hover: "hover:bg-green-700/20" },
-};
-
-type ModalEntry = {
-  logo: string;
-  title: string;
-  subtitle: string;
-  location: string;
-  dates: string;
-  bullets: string[];
-  section: string;
 };
 
 function LogoImg({ src, name, size = 40 }: { src: string; name: string; size?: number }) {
@@ -68,117 +58,110 @@ function LogoImg({ src, name, size = 40 }: { src: string; name: string; size?: n
 }
 
 function ExperienceRow({
+  id,
   logo,
   title,
   subtitle,
   location,
   dates,
+  bullets,
+  stats,
   hoverClass,
-  onSelect,
+  isOpen,
+  onToggle,
 }: {
+  id: string;
   logo: string;
   title: string;
   subtitle: string;
   location: string;
   dates: string;
+  bullets: string[];
+  stats: { value: string; label: string }[];
   hoverClass: string;
-  onSelect: () => void;
+  isOpen: boolean;
+  onToggle: () => void;
 }) {
+  const [hovered, setHovered] = useState(false);
+
   return (
-    <motion.div variants={rowVariants} className="border-b border-white/10 last:border-0">
-      <motion.button
-        onClick={onSelect}
-        whileTap={{ scale: 0.98 }}
-        title="Click to view details"
+    <motion.div id={id} variants={rowVariants} className="border-b border-white/10 last:border-0">
+      <button
+        onClick={onToggle}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
         className={`group w-full flex items-center gap-4 py-4 px-4 rounded-xl text-left cursor-pointer transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 ${hoverClass}`}
       >
         <LogoImg src={logo} name={subtitle} size={48} />
-
         <div className="flex-1 min-w-0">
-          <p className="font-semibold text-white text-sm group-hover:text-white transition-colors duration-200">{title}</p>
-          <p className="text-white/70 text-sm line-clamp-2 group-hover:text-white/60 transition-colors duration-200">{subtitle}</p>
-          <p className="text-white/40 text-xs mt-0.5 group-hover:text-white/30 transition-colors duration-200">
-            {dates} · {location}
-          </p>
+          <p className="font-semibold text-white text-sm">{title}</p>
+          <p className="text-white/70 text-sm line-clamp-2">{subtitle}</p>
+          <p className="text-white/40 text-xs mt-0.5">{dates} · {location}</p>
         </div>
-
-        <svg
-          className="w-4 h-4 text-white/40 group-hover:text-white/70 flex-shrink-0 transition-all duration-200 group-hover:translate-x-0.5"
+        <motion.svg
+          className="w-4 h-4 flex-shrink-0"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
+          animate={{
+            rotate: isOpen ? 180 : 0,
+            y: hovered ? [0, 4, 0] : 0,
+            color: hovered || isOpen ? "rgba(255,255,255,0.7)" : "rgba(255,255,255,0.4)",
+          }}
+          transition={{
+            rotate: { duration: 0.25, ease: "easeInOut" },
+            y: hovered ? { duration: 0.55, repeat: Infinity, ease: "easeInOut" } : { duration: 0.1 },
+            color: { duration: 0.2 },
+          }}
         >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-        </svg>
-      </motion.button>
-    </motion.div>
-  );
-}
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </motion.svg>
+      </button>
 
-function ExperienceModal({ entry, onClose }: { entry: ModalEntry; onClose: () => void }) {
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
-    window.addEventListener("keydown", onKey);
-    return () => {
-      document.body.style.overflow = "";
-      window.removeEventListener("keydown", onKey);
-    };
-  }, [onClose]);
-
-  return (
-    <motion.div
-      className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.2 }}
-      onClick={onClose}
-    >
-      <motion.div
-        className="relative bg-black/90 border border-green-500/30 rounded-2xl max-w-2xl w-full max-h-[85vh] overflow-y-auto shadow-2xl"
-        initial={{ scale: 0.95, opacity: 0, y: 16 }}
-        animate={{ scale: 1, opacity: 1, y: 0 }}
-        exit={{ scale: 0.95, opacity: 0, y: 8 }}
-        transition={{ duration: 0.25, ease: "easeOut" }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="h-1.5 bg-gradient-to-r from-green-600 to-green-400 rounded-t-2xl" />
-
-        <button
-          onClick={onClose}
-          className="absolute top-5 right-5 text-white/40 hover:text-white transition-colors"
-          aria-label="Close"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-
-        <div className="p-8">
-          <p className="text-xs font-semibold uppercase tracking-widest text-green-400 mb-5">{entry.section}</p>
-
-          <div className="flex items-start gap-5 mb-7">
-            <LogoImg src={entry.logo} name={entry.subtitle} size={64} />
-            <div className="min-w-0">
-              <h2 className="text-2xl font-bold text-white leading-tight mb-1">{entry.title}</h2>
-              <p className="text-gray-300 text-base">{entry.subtitle}</p>
-              <p className="text-gray-500 text-sm mt-1.5">{entry.dates} · {entry.location}</p>
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+            className="overflow-hidden"
+          >
+            <div className="px-4 pb-5 pt-2 pl-[72px]">
+              {/* Stats callouts */}
+              {stats.length > 0 && (
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {stats.map((stat, i) => (
+                    <motion.div
+                      key={i}
+                      className="flex-1 min-w-[72px] bg-green-500/10 border border-green-500/20 rounded-xl p-3 text-center"
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.25, delay: i * 0.06 }}
+                    >
+                      <p className="text-xl font-bold text-green-400 leading-none">{stat.value}</p>
+                      <p className="text-[10px] text-white/50 mt-1 leading-tight">{stat.label}</p>
+                    </motion.div>
+                  ))}
+                </div>
+              )}
+              {/* Bullets */}
+              {bullets.length > 0 ? (
+                <ul className="space-y-2.5">
+                  {bullets.map((bullet, i) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <span className="w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0 mt-[0.45rem]" />
+                      <span className="text-gray-300 text-sm leading-relaxed">{bullet}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-gray-500 text-sm italic">No details added yet.</p>
+              )}
             </div>
-          </div>
-
-          {entry.bullets.length > 0 && (
-            <ul className="space-y-3">
-              {entry.bullets.map((bullet, i) => (
-                <li key={i} className="flex items-start gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0 mt-[0.45rem]" />
-                  <span className="text-gray-300 text-sm leading-relaxed">{bullet}</span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }
@@ -210,7 +193,17 @@ function SectionCard({ title, children }: { title: string; children: React.React
 }
 
 export default function Experience() {
-  const [selected, setSelected] = useState<ModalEntry | null>(null);
+  const [openKey, setOpenKey] = useState<string | null>(null);
+
+  const toggle = (key: string) => {
+    const next = key === openKey ? null : key;
+    setOpenKey(next);
+    if (next) {
+      setTimeout(() => {
+        document.getElementById(`exp-${next}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 60);
+    }
+  };
 
   return (
     <section id="experience" className="relative py-24">
@@ -218,7 +211,7 @@ export default function Experience() {
 
         {/* Header */}
         <motion.div
-          className="flex flex-wrap items-center justify-between gap-3 mb-10"
+          className="flex flex-wrap items-center justify-between gap-3 mb-8"
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, ease: "easeOut" }}
@@ -229,8 +222,8 @@ export default function Experience() {
             </h1>
             <motion.div
               className="h-0.5 w-16 bg-gradient-to-r from-green-600 to-green-400 rounded-full mt-3"
-              initial={{ scaleX: 0 }}
               whileInView={{ scaleX: 1 }}
+              initial={{ scaleX: 0 }}
               viewport={{ once: true }}
               style={{ originX: 0.5 }}
               transition={{ duration: 0.5, ease: "easeOut", delay: 0.25 }}
@@ -267,13 +260,17 @@ export default function Experience() {
           {content.education.map((edu, i) => (
             <ExperienceRow
               key={i}
+              id={`exp-edu-${i}`}
               logo={edu.logo}
               title={edu.school}
               subtitle={edu.degree}
               location={edu.location}
               dates={edu.dates}
+              bullets={edu.bullets}
+              stats={edu.stats}
               hoverClass={accents["Education"].hover}
-              onSelect={() => setSelected({ logo: edu.logo, title: edu.school, subtitle: edu.degree, location: edu.location, dates: edu.dates, bullets: edu.bullets, section: "Education" })}
+              isOpen={openKey === `edu-${i}`}
+              onToggle={() => toggle(`edu-${i}`)}
             />
           ))}
         </SectionCard>
@@ -283,13 +280,17 @@ export default function Experience() {
           {content.experience.map((job, i) => (
             <ExperienceRow
               key={i}
+              id={`exp-work-${i}`}
               logo={job.logo}
               title={job.title}
               subtitle={job.company}
               location={job.location}
               dates={job.dates}
+              bullets={job.bullets}
+              stats={job.stats}
               hoverClass={accents["Work Experience"].hover}
-              onSelect={() => setSelected({ logo: job.logo, title: job.title, subtitle: job.company, location: job.location, dates: job.dates, bullets: job.bullets, section: "Work Experience" })}
+              isOpen={openKey === `work-${i}`}
+              onToggle={() => toggle(`work-${i}`)}
             />
           ))}
         </SectionCard>
@@ -299,13 +300,17 @@ export default function Experience() {
           {content.leadership.map((role, i) => (
             <ExperienceRow
               key={i}
+              id={`exp-lead-${i}`}
               logo={role.logo}
               title={role.title}
               subtitle={role.org}
               location={role.location ?? ""}
               dates={role.dates}
+              bullets={role.bullets}
+              stats={role.stats}
               hoverClass={accents["Leadership & Involvement"].hover}
-              onSelect={() => setSelected({ logo: role.logo, title: role.title, subtitle: role.org, location: role.location ?? "", dates: role.dates, bullets: role.bullets, section: "Leadership & Involvement" })}
+              isOpen={openKey === `lead-${i}`}
+              onToggle={() => toggle(`lead-${i}`)}
             />
           ))}
         </SectionCard>
@@ -324,13 +329,6 @@ export default function Experience() {
         </SectionCard>
 
       </div>
-
-      {/* Detail modal */}
-      <AnimatePresence>
-        {selected && (
-          <ExperienceModal entry={selected} onClose={() => setSelected(null)} />
-        )}
-      </AnimatePresence>
     </section>
   );
 }

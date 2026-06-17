@@ -153,16 +153,36 @@ export default function About() {
         </motion.div>
 
         {/* Photo + Bio grid */}
-        <div className="grid lg:grid-cols-2 gap-6 items-start">
+        <div className="grid lg:grid-cols-2 gap-6 items-stretch">
 
           <motion.div
-            className=""
+            className="flex flex-col gap-4"
             initial={{ opacity: 0, x: -24 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.5, ease: "easeOut" }}
           >
             <TiltPhoto />
+
+            {/* Highlights card */}
+            <div className="flex-1 rounded-2xl border border-green-500/30 bg-black/50 backdrop-blur-sm p-5">
+              <p className="text-xs font-semibold uppercase tracking-widest text-green-400/70 mb-4">Highlights</p>
+              <ul className="flex flex-col gap-3">
+                {content.about.highlights.slice(0, 3).map((item, i) => (
+                  <motion.li
+                    key={i}
+                    className="flex items-start gap-3 text-sm text-gray-300"
+                    initial={{ opacity: 0, x: -12 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.35, delay: i * 0.07, ease: "easeOut" }}
+                  >
+                    <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0" />
+                    {item}
+                  </motion.li>
+                ))}
+              </ul>
+            </div>
           </motion.div>
 
           {/* Bio card */}

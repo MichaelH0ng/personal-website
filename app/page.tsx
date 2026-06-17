@@ -57,7 +57,7 @@ function TypewriterName({ text }: { text: string }) {
     return () => clearInterval(id);
   }, [text]);
 
-  return <>{displayed}<span className="animate-pulse">|</span></>;
+  return <>{displayed}<span className="animate-pulse text-green-400">|</span></>;
 }
 
 const marqueeLogos = [
@@ -132,7 +132,7 @@ export default function Home() {
           <div className="relative max-w-6xl mx-auto px-6 py-12 lg:py-24 w-full">
             <motion.div
               className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center"
-              style={{ scale: heroScale, rotate: heroRotate, opacity: heroOpacity }}
+              style={{ opacity: heroOpacity }}
             >
 
               {/* Left — Headshot */}
@@ -172,7 +172,7 @@ export default function Home() {
               </motion.div>
 
               {/* Right — Hero text */}
-              <motion.div style={{ y: textY }} className="flex flex-col justify-center rounded-2xl px-8 py-7 bg-green-950/55 border border-green-400/20 backdrop-blur-sm">
+              <motion.div className="flex flex-col justify-center rounded-2xl px-8 py-7 bg-green-950/55 border border-green-400/20 backdrop-blur-sm">
                 {/* Top bar */}
                 <motion.div
                   className="h-[4px] rounded-full mb-5"
@@ -196,8 +196,14 @@ export default function Home() {
                   transition={{ duration: 0.5, delay: 0.15, ease: "easeOut" }}
                 >
                   Hi, I&apos;m{" "}
-                  <span className="bg-gradient-to-r from-green-300 to-green-400 bg-clip-text text-transparent" style={{ fontFamily: "var(--font-pinyon-script)" }}>
-                    <TypewriterName text={content.name} />
+                  <span className="relative inline-block">
+                    <span
+                      className="bg-gradient-to-r from-green-300 to-green-400 bg-clip-text text-transparent italic [filter:drop-shadow(0_0_14px_rgba(74,222,128,0.75))]"
+                      style={{ fontFamily: "var(--font-playfair)" }}
+                    >
+                      <TypewriterName text={content.name} />
+                    </span>
+                    <span className="absolute -bottom-1 left-0 right-0 h-0.5 rounded-full bg-gradient-to-r from-green-400/0 via-green-400 to-green-400/0" />
                   </span>
                 </motion.h1>
 
@@ -248,28 +254,6 @@ export default function Home() {
             </motion.div>
           </div>
 
-          {/* Scroll indicator */}
-          <motion.div
-            className="absolute bottom-10 left-1/2 -translate-x-1/2 pointer-events-none"
-            style={{ opacity: scrollIndicatorOpacity }}
-          >
-            <motion.div
-              className="flex flex-col items-center gap-2"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1.4, duration: 0.6 }}
-            >
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-green-400/50">Scroll</p>
-              <motion.div
-                animate={{ y: [0, 7, 0] }}
-                transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-              >
-                <svg className="w-5 h-5 text-green-400/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </motion.div>
-            </motion.div>
-          </motion.div>
         </section>
 
         {/* Divider: hero → banner */}

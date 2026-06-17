@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Pinyon_Script, Poppins } from "next/font/google";
+import { Geist, Geist_Mono, Pinyon_Script, Poppins, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import ShaderBackground from "@/components/ShaderBackground";
 
@@ -25,6 +25,12 @@ const poppins = Poppins({
   weight: ["300", "400", "500", "600"],
 });
 
+const playfairDisplay = Playfair_Display({
+  variable: "--font-playfair",
+  subsets: ["latin"],
+  weight: ["700"],
+});
+
 export const metadata: Metadata = {
   title: "Michael Hong",
   description: "Business Administration student at Cal Poly with a concentration in Information Systems and a Minor in Music, passionate about music technology.",
@@ -38,7 +44,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${pinyonScript.variable} ${poppins.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${pinyonScript.variable} ${poppins.variable} ${playfairDisplay.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <a
