@@ -9,11 +9,9 @@ export const content = {
   about: {
     bio: "My name is Michael Hong and I'm a third year business student at Cal Poly! I'm from Dublin, California (Bay Area) and I'd love to work in the music industry when I'm older, more specifically music technology. I will be interning at Protiviti in San Francisco this summer as a technology consulting intern, and in my free time I like to go to the gym, play music, and go on spontaneous adventures!",
     highlights: [
-      "3.87 GPA — Dean's List 8x, President's List 2x",
-      "Incoming Technology Consulting Intern at Protiviti (June 2026)",
-      "Amazon Area Manager Intern — oversaw 110+ associates across fulfillment operations",
-      "President of OCOB Student Ambassadors, representing 3,000+ students",
-      "Executive Vice-President of Alpha Kappa Psi Business Fraternity",
+      "3.88 GPA — Dean's List 9x, President's List 3x",
+      "Technology Consulting Intern at Protiviti",
+      "Interests in music, calisthenics, and spontaneous adventures",
     ],
   },
 
