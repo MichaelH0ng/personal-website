@@ -7,7 +7,7 @@ export const content = {
   instagram: "https://www.instagram.com/michael.honggg/",
 
   about: {
-    bio: "My name is Michael Hong and I'm a third year business student at Cal Poly! I'm from Dublin, California (Bay Area) and I'd love to work in the music industry when I'm older, more specifically music technology. I will be interning at Protiviti in San Francisco this summer as a technology consulting intern, and in my free time I like to go to the gym, play music, and go on spontaneous adventures!",
+    bio: "My name is Michael Hong and I'm a third year business student at Cal Poly! I'm from Dublin, California (Bay Area) and I'd love to work in the music industry when I'm older, more specifically music technology. I am currently interning at Protiviti in San Francisco as a technology consulting intern, and in my free time I like to go to the gym, play music, and go on spontaneous adventures!",
     highlights: [
       "3.88 GPA — Dean's List 9x, President's List 3x",
       "Technology Consulting Intern at Protiviti",
@@ -23,13 +23,13 @@ export const content = {
       dates: "Sept. 2023 – Jun. 2027",
       logo: "/logos/calpoly.jpeg",
       stats: [
-        { value: "3.87", label: "GPA" },
-        { value: "8x", label: "Dean's List" },
-        { value: "2x", label: "President's List" },
+        { value: "3.88", label: "GPA" },
+        { value: "9x", label: "Dean's List" },
+        { value: "3x", label: "President's List" },
       ],
       bullets: [
-        "GPA: 3.87",
-        "Honors: Dean's List 8x, President's List 2x",
+        "GPA: 3.88",
+        "Honors: Dean's List 9x, President's List 3x",
         "Relevant Coursework: Database Systems in Business (SQL), Project Management, Business Application Development",
       ],
     },
