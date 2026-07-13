@@ -24,7 +24,7 @@ export default function Footer() {
               baseIntensity={0.08}
               hoverIntensity={0.4}
               fuzzRange={20}
-              className="mb-3 block -ml-[47px]"
+              className="mb-3 block -ml-10"
             >
               {content.name}
             </FuzzyText>

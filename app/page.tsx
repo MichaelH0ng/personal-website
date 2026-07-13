@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -31,7 +31,7 @@ function MarqueeCard({ logo }: { logo: { src: string; alt: string; role: string 
         </div>
 
         {/* Logo card */}
-        <div className="bg-white rounded-xl px-4 py-2 shadow-sm flex items-center justify-center transition-all duration-300 hover:shadow-md hover:scale-105" style={{ minWidth: 80, height: 44 }}>
+        <div className="bg-white rounded-xl px-4 py-2 shadow-sm flex items-center justify-center transition-all duration-300 hover:shadow-md hover:scale-105 cursor-pointer" style={{ minWidth: 80, height: 44 }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={logo.src} alt={logo.alt} className="h-8 w-auto object-contain" />
         </div>
@@ -41,23 +41,26 @@ function MarqueeCard({ logo }: { logo: { src: string; alt: string; role: string 
   );
 }
 
-function TypewriterName({ text }: { text: string }) {
-  const [displayed, setDisplayed] = useState("");
+function TypewriterName({ text, reduceMotion }: { text: string; reduceMotion: boolean }) {
+  const [displayed, setDisplayed] = useState(reduceMotion ? text : "");
+  const [done, setDone] = useState(reduceMotion);
 
   useEffect(() => {
+    if (reduceMotion) { setDisplayed(text); setDone(true); return; }
     let i = 0;
     const id = setInterval(() => {
-      if (i <= text.length) {
-        setDisplayed(text.slice(0, i));
+      if (i < text.length) {
         i++;
+        setDisplayed(text.slice(0, i));
       } else {
         clearInterval(id);
+        setDone(true);
       }
     }, 150);
     return () => clearInterval(id);
-  }, [text]);
+  }, [text, reduceMotion]);
 
-  return <>{displayed}<span className="animate-pulse text-green-400">|</span></>;
+  return <>{displayed}{!done && <span className="animate-pulse text-green-400">|</span>}</>;
 }
 
 const marqueeLogos = [
@@ -108,18 +111,10 @@ const exploreCards = [
 
 export default function Home() {
   const heroRef = useRef<HTMLElement>(null);
+  const shouldReduceMotion = useReducedMotion() ?? false;
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const photoY      = useTransform(scrollYProgress, [0, 1], ["0px", "-80px"]);
-  const textY       = useTransform(scrollYProgress, [0, 1], ["0px",  "60px"]);
-  const heroScale   = useTransform(scrollYProgress, [0, 1], [1, 0.82]);
-  const heroRotate  = useTransform(scrollYProgress, [0, 1], [0, -4]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.75], [1, 0]);
-  const scrollIndicatorOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-
-  // Split tagline at first sentence
-  const taglineDotIdx = content.tagline.indexOf(". ") + 1;
-  const taglineFirst = content.tagline.slice(0, taglineDotIdx);
-  const taglineRest  = content.tagline.slice(taglineDotIdx).trim();
 
   return (
     <>
@@ -154,7 +149,7 @@ export default function Home() {
                       width: "calc(100% + 12px)",
                       height: "calc(100% + 12px)",
                       background: "conic-gradient(from 0deg, transparent 0%, rgba(255,255,255,0.9) 20%, white 35%, transparent 50%, rgba(255,255,255,0.6) 70%, white 85%, transparent 100%)",
-                      animation: "spin-ccw 3.5s linear infinite",
+                      animation: shouldReduceMotion ? "none" : "spin-ccw 3.5s linear infinite",
                     }}
                   />
 
@@ -201,23 +196,20 @@ export default function Home() {
                       className="bg-gradient-to-r from-green-300 to-green-400 bg-clip-text text-transparent italic [filter:drop-shadow(0_0_14px_rgba(74,222,128,0.75))]"
                       style={{ fontFamily: "var(--font-playfair)" }}
                     >
-                      <TypewriterName text={content.name} />
+                      <TypewriterName text={content.name} reduceMotion={shouldReduceMotion} />
                     </span>
                     <span className="absolute -bottom-1 left-0 right-0 h-0.5 rounded-full bg-gradient-to-r from-green-400/0 via-green-400 to-green-400/0" />
                   </span>
                 </motion.h1>
 
-                {/* Split tagline */}
-                <motion.div
+                {/* Tagline */}
+                <motion.p
+                  className="text-base text-green-100 leading-relaxed mb-6"
                   initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.25, ease: "easeOut" }}
-                  className="mb-6"
                 >
-                  <p className="text-base text-green-100 leading-relaxed">{taglineFirst}</p>
-                  {taglineRest && (
-                    <p className="text-sm text-white leading-relaxed mt-2">{taglineRest}</p>
-                  )}
-                </motion.div>
+                  {content.tagline}
+                </motion.p>
 
                 {/* CTAs */}
                 <motion.div
@@ -254,6 +246,7 @@ export default function Home() {
             </motion.div>
           </div>
 
+
         </section>
 
         {/* Divider: hero → banner */}
@@ -271,8 +264,8 @@ export default function Home() {
           <div style={{ overflowX: "clip", overflowY: "visible" }}>
             <motion.div
               className="flex w-max items-center"
-              animate={{ x: ["0%", "-50%"] }}
-              transition={{ duration: 40, ease: "linear", repeat: Infinity }}
+              animate={shouldReduceMotion ? { x: "0%" } : { x: ["0%", "-50%"] }}
+              transition={shouldReduceMotion ? {} : { duration: 40, ease: "linear", repeat: Infinity }}
             >
               {[...marqueeLogos, ...marqueeLogos].map((logo, i) => (
                 <MarqueeCard key={i} logo={logo} />
@@ -330,6 +323,7 @@ export default function Home() {
                     </div>
                     <div className="flex-1 min-w-0 text-left">
                       <p className="text-white group-hover:text-green-400 transition-colors font-semibold text-sm">{card.label}</p>
+                      <p className="text-xs text-gray-400 mt-0.5 leading-snug">{card.description}</p>
                     </div>
                     <svg className="w-4 h-4 text-white group-hover:text-green-400 transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

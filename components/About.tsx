@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "framer-motion";
 import { content } from "@/config/content";
 import { InterestsPanel } from "@/components/InterestsPanel";
 import Masonry from "@/components/Masonry";
@@ -67,7 +67,7 @@ const quickFacts = [
   },
 ];
 
-function TiltPhoto() {
+function TiltPhoto({ reduceMotion }: { reduceMotion: boolean }) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [12, -12]), { stiffness: 300, damping: 30 });
@@ -90,7 +90,7 @@ function TiltPhoto() {
             transformStyle: "preserve-3d",
             background: "linear-gradient(135deg, #4ade80, #86efac, #16a34a, #4ade80, #86efac, #16a34a)",
             backgroundSize: "300% 300%",
-            animation: "gradientShift 5s ease infinite",
+            animation: reduceMotion ? "none" : "gradientShift 5s ease infinite",
           }}
           className="rounded-2xl p-[2px] shadow-lg min-h-[280px] h-full cursor-pointer"
         >
@@ -128,6 +128,8 @@ function SectionDivider() {
 }
 
 export default function About() {
+  const shouldReduceMotion = useReducedMotion() ?? false;
+
   return (
     <section id="about" className="relative pt-4 pb-24 overflow-hidden">
 
@@ -162,7 +164,7 @@ export default function About() {
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.5, ease: "easeOut" }}
           >
-            <TiltPhoto />
+            <TiltPhoto reduceMotion={shouldReduceMotion} />
 
             {/* Highlights card */}
             <div className="flex-1 rounded-2xl border border-green-500/30 bg-black/50 backdrop-blur-sm p-5">
@@ -198,16 +200,19 @@ export default function About() {
               {/* Bio text */}
               <motion.p
                 className="text-gray-300 leading-relaxed text-lg"
-                variants={bioVariants}
-                initial="hidden"
-                whileInView="visible"
+                variants={shouldReduceMotion ? undefined : bioVariants}
+                initial={shouldReduceMotion ? { opacity: 0 } : "hidden"}
+                whileInView={shouldReduceMotion ? { opacity: 1 } : "visible"}
                 viewport={{ once: true, margin: "-80px" }}
+                transition={shouldReduceMotion ? { duration: 0.4, ease: "easeOut" } : undefined}
               >
-                {content.about.bio.split(" ").map((word, i) => (
-                  <motion.span key={i} variants={wordVariant} className="inline-block mr-[0.28em]">
-                    {word}
-                  </motion.span>
-                ))}
+                {shouldReduceMotion
+                  ? content.about.bio
+                  : content.about.bio.split(" ").map((word, i) => (
+                      <motion.span key={i} variants={wordVariant} className="inline-block mr-[0.28em]">
+                        {word}
+                      </motion.span>
+                    ))}
               </motion.p>
 
               {/* Quick facts */}
@@ -230,9 +235,12 @@ export default function About() {
               {/* CTA */}
               <Link
                 href="/contact"
-                className="mt-6 inline-flex items-center gap-2 bg-gradient-to-r from-green-600 to-green-500 text-white font-medium px-6 py-3 rounded-xl shadow-sm hover:shadow-md hover:from-green-700 hover:to-green-600 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
+                className="mt-6 inline-flex items-center gap-2 bg-gradient-to-r from-green-600 to-green-500 text-white font-medium px-6 py-3 rounded-xl shadow-sm hover:shadow-md hover:from-green-700 hover:to-green-600 active:scale-[0.97] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
               >
-                🍜 Send me food recs
+                Get in Touch
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
               </Link>
             </div>
           </motion.div>
@@ -302,7 +310,7 @@ export default function About() {
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.45, ease: "easeOut" }}
         >
-          <h3 className="text-3xl font-bold mb-1"><ShinyText text="Gallery" color="#ffffff" shineColor="#4ade80" speed={4} /></h3>
+          <h2 className="text-3xl font-bold mb-1"><ShinyText text="Gallery" color="#ffffff" shineColor="#4ade80" speed={4} /></h2>
           <motion.div
             className="h-0.5 w-16 bg-gradient-to-r from-green-600 to-green-400 rounded-full mt-3 mb-6"
             initial={{ scaleX: 0 }}

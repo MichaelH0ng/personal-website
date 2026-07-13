@@ -50,18 +50,6 @@ function useMeasure() {
   return [ref, width] as const;
 }
 
-async function preloadImages(urls: string[]) {
-  await Promise.all(
-    urls.map(
-      (src) =>
-        new Promise<void>((resolve) => {
-          const img = new Image();
-          img.src = src;
-          img.onload = img.onerror = () => resolve();
-        })
-    )
-  );
-}
 
 type Props = {
   items: MasonryItem[];
@@ -96,11 +84,6 @@ export default function Masonry({
   );
 
   const [containerRef, width] = useMeasure();
-  const [imagesReady, setImagesReady] = useState(false);
-
-  useEffect(() => {
-    preloadImages(items.map((i) => i.img)).then(() => setImagesReady(true));
-  }, [items]);
 
   const grid = useMemo<GridItem[]>(() => {
     if (!width) return [];
@@ -133,7 +116,7 @@ export default function Masonry({
   const hasMounted = useRef(false);
 
   useEffect(() => {
-    if (!imagesReady || !grid.length) return;
+    if (!grid.length) return;
 
     grid.forEach((item, index) => {
       const sel = `[data-masonry-key="${item.id}"]`;
@@ -187,7 +170,7 @@ export default function Masonry({
 
     hasMounted.current = true;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [grid, imagesReady]);
+  }, [grid]);
 
   const handleMouseEnter = (_: React.MouseEvent, item: GridItem) => {
     if (scaleOnHover) {

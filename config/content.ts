@@ -1,7 +1,6 @@
 export const content = {
   name: "Michael Hong",
-  tagline:
-    "Business Administration Major with a concentration in Information Systems and a Minor in Music. I'd love to combine my business expertise with my passion for music to make a meaningful impact working in music technology.",
+  tagline: "Cal Poly Business & Music student passionate about music technology.",
   email: "michaelhonggsq@gmail.com",
   linkedin: "https://www.linkedin.com/in/michaelhong170/",
   instagram: "https://www.instagram.com/michael.honggg/",
