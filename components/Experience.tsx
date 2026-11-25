@@ -25,7 +25,7 @@ function LogoImg({ src, size = 40 }: { src: string; size?: number }) {
       style={{ width: size, height: size }}
       className="rounded-full border border-white/10 bg-white flex items-center justify-center flex-shrink-0 overflow-hidden transition-transform duration-200 group-hover:scale-105"
     >
-      <Image src={src} alt="" width={size - 8} height={size - 8} className="object-contain" />
+      <Image src={src} alt="" width={size} height={size} className="w-full h-full object-cover" />
     </div>
   );
 }
@@ -55,7 +55,6 @@ function ExperienceRow({
   isOpen: boolean;
   onToggle: () => void;
 }) {
-  const topStat = stats[0];
   const panelId = `${id}-panel`;
 
   return (
@@ -72,12 +71,6 @@ function ExperienceRow({
           <p className="text-muted text-sm line-clamp-2">{subtitle}</p>
           <p className="text-subtle text-xs mt-0.5">{dates} · {location}</p>
         </div>
-        {topStat && !isOpen && (
-          <span className="hidden sm:flex flex-col items-end flex-shrink-0 text-right">
-            <span className="text-green-300 font-bold leading-none">{topStat.value}</span>
-            <span className="text-subtle text-xs mt-1">{topStat.label}</span>
-          </span>
-        )}
         <motion.svg
           className="w-4 h-4 flex-shrink-0 text-muted"
           fill="none"
