@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { content } from "@/config/content";
+import { cn } from "@/lib/utils";
+import { groupByOrg, isCurrent, rangeDuration, spanDuration } from "@/lib/experience";
 import GlassCard from "@/components/GlassCard";
+import OrgLogo from "@/components/OrgLogo";
 import SectionHeading from "@/components/SectionHeading";
 
 const rowVariants = {
@@ -17,17 +19,93 @@ const containerVariants = {
   visible: { transition: { staggerChildren: 0.07 } },
 };
 
-function LogoImg({ src, size = 40 }: { src: string; size?: number }) {
+type Stat = { value: string; label: string };
+
+type Role = {
+  title: string;
+  org: string;
+  location: string;
+  dates: string;
+  logo: string;
+  stats: Stat[];
+  bullets: string[];
+};
+
+const toggleButton =
+  "group w-full flex items-center gap-4 rounded-xl text-left transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-400 focus-visible:ring-inset";
+
+function Chevron({ isOpen }: { isOpen: boolean }) {
   return (
-    <div
-      style={{ width: size, height: size }}
-      className="rounded-full border border-white/10 bg-white flex items-center justify-center flex-shrink-0 overflow-hidden transition-transform duration-200 group-hover:scale-105"
+    <motion.svg
+      className="w-4 h-4 flex-shrink-0 text-muted"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      animate={{ rotate: isOpen ? 180 : 0 }}
+      transition={{ duration: 0.25, ease: "easeInOut" }}
     >
-      <Image src={src} alt="" width={size} height={size} className="w-full h-full object-cover" />
-    </div>
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+    </motion.svg>
   );
 }
 
+/** "Feb. 2026 – Aug. 2026 · 7 mos". The duration depends on today's date for "Present" roles. */
+function DateLine({ dates, showDuration = true, className }: { dates: string; showDuration?: boolean; className?: string }) {
+  const duration = showDuration ? rangeDuration(dates) : "";
+  return (
+    <p className={cn("text-subtle text-xs mt-0.5", className)} suppressHydrationWarning>
+      {dates}
+      {duration && ` · ${duration}`}
+    </p>
+  );
+}
+
+/** Expandable stats + bullets shown under a row when it's opened. */
+function DetailsPanel({ id, isOpen, stats, bullets, className }: { id: string; isOpen: boolean; stats: Stat[]; bullets: string[]; className?: string }) {
+  return (
+    <AnimatePresence initial={false}>
+      {isOpen && (
+        <motion.div
+          id={id}
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: "auto", opacity: 1 }}
+          exit={{ height: 0, opacity: 0 }}
+          transition={{ duration: 0.25, ease: "easeInOut" }}
+          className="overflow-hidden"
+        >
+          <div className={className}>
+            {stats.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-4">
+                {stats.map((stat, i) => (
+                  <div
+                    key={i}
+                    className="flex-1 min-w-[80px] bg-green-500/10 border border-green-500/25 rounded-xl p-3 text-center"
+                  >
+                    <p className="text-xl font-bold text-green-300 leading-none">{stat.value}</p>
+                    <p className="text-xs text-muted mt-1 leading-tight">{stat.label}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+            {bullets.length > 0 && (
+              <ul className="space-y-2.5">
+                {bullets.map((bullet, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <span className="w-1.5 h-1.5 rounded-full bg-green-400 flex-shrink-0 mt-[0.5rem]" aria-hidden="true" />
+                    <span className="text-muted text-sm leading-relaxed">{bullet}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
+/** One role at one org: logo, title, org, dates. Click to expand details. */
 function ExperienceRow({
   id,
   logo,
@@ -37,6 +115,7 @@ function ExperienceRow({
   dates,
   bullets,
   stats,
+  showDuration = true,
   isOpen,
   onToggle,
 }: {
@@ -47,80 +126,167 @@ function ExperienceRow({
   location: string;
   dates: string;
   bullets: string[];
-  stats: { value: string; label: string }[];
+  stats: Stat[];
+  showDuration?: boolean;
   isOpen: boolean;
   onToggle: () => void;
 }) {
   const panelId = `${id}-panel`;
+  const hasDetails = bullets.length > 0 || stats.length > 0;
+
+  const inner = (
+    <>
+      <OrgLogo src={logo} name={subtitle} size={48} className="transition-transform duration-200 group-hover:scale-105" />
+      <div className="flex-1 min-w-0">
+        <h3 className="font-semibold text-white text-base">{title}</h3>
+        <p className="text-muted text-sm line-clamp-2">{subtitle}</p>
+        <DateLine dates={dates} showDuration={showDuration} />
+        <p className="text-subtle text-xs">{location}</p>
+      </div>
+    </>
+  );
 
   return (
     <motion.div id={id} variants={rowVariants} className="border-b border-white/10 last:border-0">
-      <button
-        onClick={onToggle}
-        aria-expanded={isOpen}
-        aria-controls={panelId}
-        className="group w-full flex items-center gap-4 py-4 px-4 rounded-xl text-left cursor-pointer transition-colors duration-200 hover:bg-green-700/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-400 focus-visible:ring-inset"
-      >
-        <LogoImg src={logo} size={48} />
-        <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-white text-base">{title}</h3>
-          <p className="text-muted text-sm line-clamp-2">{subtitle}</p>
-          <p className="text-subtle text-xs mt-0.5">{dates} · {location}</p>
-        </div>
-        <motion.svg
-          className="w-4 h-4 flex-shrink-0 text-muted"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-          animate={{ rotate: isOpen ? 180 : 0 }}
-          transition={{ duration: 0.25, ease: "easeInOut" }}
+      {hasDetails ? (
+        <button
+          onClick={onToggle}
+          aria-expanded={isOpen}
+          aria-controls={panelId}
+          className={cn(toggleButton, "py-4 px-4 cursor-pointer hover:bg-green-700/20")}
         >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-        </motion.svg>
-      </button>
-
-      <AnimatePresence initial={false}>
-        {isOpen && (
-          <motion.div
-            id={panelId}
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25, ease: "easeInOut" }}
-            className="overflow-hidden"
-          >
-            <div className="px-4 pb-5 pt-2 sm:pl-[76px]">
-              {stats.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {stats.map((stat, i) => (
-                    <div
-                      key={i}
-                      className="flex-1 min-w-[80px] bg-green-500/10 border border-green-500/25 rounded-xl p-3 text-center"
-                    >
-                      <p className="text-xl font-bold text-green-300 leading-none">{stat.value}</p>
-                      <p className="text-xs text-muted mt-1 leading-tight">{stat.label}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
-              {bullets.length > 0 && (
-                <ul className="space-y-2.5">
-                  {bullets.map((bullet, i) => (
-                    <li key={i} className="flex items-start gap-3">
-                      <span className="w-1.5 h-1.5 rounded-full bg-green-400 flex-shrink-0 mt-[0.5rem]" aria-hidden="true" />
-                      <span className="text-muted text-sm leading-relaxed">{bullet}</span>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          {inner}
+          <Chevron isOpen={isOpen} />
+        </button>
+      ) : (
+        <div className="flex items-center gap-4 py-4 px-4">{inner}</div>
+      )}
+      <DetailsPanel id={panelId} isOpen={isOpen} stats={stats} bullets={bullets} className="px-4 pb-5 pt-2 sm:pl-[80px]" />
     </motion.div>
   );
 }
+
+// Vertical position of a role's timeline dot, lined up with its title text.
+const DOT_Y = 24;
+
+/** Several roles at the same org, LinkedIn-style: org header, then a connected timeline of roles. */
+function ExperienceGroup({
+  sectionKey,
+  org,
+  roles,
+  openKey,
+  onToggle,
+}: {
+  sectionKey: string;
+  org: string;
+  roles: Role[];
+  openKey: string | null;
+  onToggle: (key: string) => void;
+}) {
+  const span = spanDuration(roles.map((r) => r.dates));
+
+  return (
+    <motion.div variants={rowVariants} className="border-b border-white/10 last:border-0 px-4 pt-4 pb-2">
+      <div className="flex items-center gap-4">
+        <OrgLogo src={roles[0].logo} name={org} size={48} />
+        <div className="flex-1 min-w-0">
+          <h3 className="font-semibold text-white text-base">{org}</h3>
+          <p className="text-muted text-sm" suppressHydrationWarning>
+            {roles.length} roles{span && ` · ${span}`}
+          </p>
+          <p className="text-subtle text-xs">{roles[0].location}</p>
+        </div>
+      </div>
+
+      <ol className="mt-1">
+        {roles.map((role, i) => {
+          const key = `${sectionKey}-${i}`;
+          const isOpen = openKey === key;
+          const panelId = `exp-${key}-panel`;
+          const first = i === 0;
+          const last = i === roles.length - 1;
+          const current = isCurrent(role.dates);
+
+          return (
+            <li key={key} id={`exp-${key}`} className="relative flex">
+              {/* Timeline rail: a line through every role, with a dot at each title */}
+              <div className="relative w-12 flex-shrink-0" aria-hidden="true">
+                <span
+                  className="absolute left-1/2 -translate-x-1/2 w-0.5 bg-green-500/30"
+                  style={first ? { top: DOT_Y, bottom: 0 } : last ? { top: 0, height: DOT_Y } : { top: 0, bottom: 0 }}
+                />
+                <span
+                  className={cn(
+                    "absolute left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full",
+                    current
+                      ? "bg-green-400 shadow-[0_0_10px_2px_rgba(74,222,128,0.6)]"
+                      : "bg-green-950 border-2 border-green-500/70",
+                  )}
+                  style={{ top: DOT_Y }}
+                />
+                {current && (
+                  <span
+                    className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-green-400/60 animate-ping"
+                    style={{ top: DOT_Y }}
+                  />
+                )}
+              </div>
+
+              <div className="flex-1 min-w-0 ml-1">
+                <button
+                  onClick={() => onToggle(key)}
+                  aria-expanded={isOpen}
+                  aria-controls={panelId}
+                  className={cn(toggleButton, "py-3 px-3 cursor-pointer hover:bg-green-700/20")}
+                >
+                  <div className="flex-1 min-w-0">
+                    <h4 className="font-semibold text-white text-[0.95rem] leading-6">{role.title}</h4>
+                    <DateLine dates={role.dates} />
+                  </div>
+                  <Chevron isOpen={isOpen} />
+                </button>
+                <DetailsPanel id={panelId} isOpen={isOpen} stats={role.stats} bullets={role.bullets} className="px-3 pb-4 pt-1" />
+              </div>
+            </li>
+          );
+        })}
+      </ol>
+    </motion.div>
+  );
+}
+
+/** Renders a section's roles grouped by org: single roles as a row, repeat orgs as a timeline. */
+function RoleList({ sectionKey, roles, openKey, onToggle }: { sectionKey: string; roles: Role[]; openKey: string | null; onToggle: (key: string) => void }) {
+  return (
+    <>
+      {groupByOrg(roles, (r) => r.org).map((group, gi) => {
+        const key = `${sectionKey}-${gi}`;
+        if (group.items.length > 1) {
+          return <ExperienceGroup key={key} sectionKey={key} org={group.org} roles={group.items} openKey={openKey} onToggle={onToggle} />;
+        }
+        const role = group.items[0];
+        return (
+          <ExperienceRow
+            key={key}
+            id={`exp-${key}`}
+            logo={role.logo}
+            title={role.title}
+            subtitle={role.org}
+            location={role.location}
+            dates={role.dates}
+            bullets={role.bullets}
+            stats={role.stats}
+            isOpen={openKey === key}
+            onToggle={() => onToggle(key)}
+          />
+        );
+      })}
+    </>
+  );
+}
+
+const workRoles: Role[] = content.experience.map((e) => ({ ...e, org: e.company }));
+const leadershipRoles: Role[] = content.leadership;
 
 function SectionCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -197,6 +363,7 @@ export default function Experience() {
               dates={edu.dates}
               bullets={edu.bullets}
               stats={edu.stats}
+              showDuration={false}
               isOpen={openKey === `edu-${i}`}
               onToggle={() => toggle(`edu-${i}`)}
             />
@@ -204,39 +371,11 @@ export default function Experience() {
         </SectionCard>
 
         <SectionCard title="Work Experience">
-          {content.experience.map((job, i) => (
-            <ExperienceRow
-              key={i}
-              id={`exp-work-${i}`}
-              logo={job.logo}
-              title={job.title}
-              subtitle={job.company}
-              location={job.location}
-              dates={job.dates}
-              bullets={job.bullets}
-              stats={job.stats}
-              isOpen={openKey === `work-${i}`}
-              onToggle={() => toggle(`work-${i}`)}
-            />
-          ))}
+          <RoleList sectionKey="work" roles={workRoles} openKey={openKey} onToggle={toggle} />
         </SectionCard>
 
         <SectionCard title="Leadership & Involvement">
-          {content.leadership.map((role, i) => (
-            <ExperienceRow
-              key={i}
-              id={`exp-lead-${i}`}
-              logo={role.logo}
-              title={role.title}
-              subtitle={role.org}
-              location={role.location}
-              dates={role.dates}
-              bullets={role.bullets}
-              stats={role.stats}
-              isOpen={openKey === `lead-${i}`}
-              onToggle={() => toggle(`lead-${i}`)}
-            />
-          ))}
+          <RoleList sectionKey="lead" roles={leadershipRoles} openKey={openKey} onToggle={toggle} />
         </SectionCard>
 
         <SectionCard title="Skills">

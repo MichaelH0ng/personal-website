@@ -6,6 +6,7 @@ import { PhotoCarousel } from "@/components/PhotoCarousel";
 import GlassCard from "@/components/GlassCard";
 import { content } from "@/config/content";
 import { entrySlug } from "@/lib/slugs";
+import { orgInitials } from "@/lib/experience";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -103,7 +104,11 @@ export default async function ExperienceDetailPage({ params }: Props) {
             <div className="flex flex-col md:flex-row gap-10 items-start">
 
               <div className="flex-shrink-0 w-32 h-32 rounded-2xl bg-white flex items-center justify-center overflow-hidden">
-                <Image src={entry.logo} alt="" width={112} height={112} className="object-contain" />
+                {entry.logo ? (
+                  <Image src={entry.logo} alt="" width={112} height={112} className="object-contain" />
+                ) : (
+                  <span className="text-4xl font-semibold text-green-700" aria-hidden="true">{orgInitials(entry.subtitle)}</span>
+                )}
               </div>
 
               <div className="flex-1 min-w-0">
