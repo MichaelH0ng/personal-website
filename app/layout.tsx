@@ -1,23 +1,9 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Pinyon_Script, Poppins, Playfair_Display } from "next/font/google";
+import { Poppins, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import ShaderBackground from "@/components/ShaderBackground";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const pinyonScript = Pinyon_Script({
-  variable: "--font-pinyon-script",
-  subsets: ["latin"],
-  weight: "400",
-});
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -44,7 +30,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${pinyonScript.variable} ${poppins.variable} ${playfairDisplay.variable} h-full antialiased`}
+      className={`${poppins.variable} ${playfairDisplay.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <a
@@ -54,7 +40,11 @@ export default function RootLayout({
           Skip to main content
         </a>
         <ShaderBackground />
-        {children}
+        <Navbar />
+        <main id="main-content" className="flex-1 pt-16 overflow-x-hidden">
+          {children}
+        </main>
+        <Footer />
       </body>
     </html>
   );

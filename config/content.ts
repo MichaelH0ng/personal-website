@@ -1,6 +1,11 @@
+/** Flip to true once real tracks or links are added to content.projects. Hides the Projects page from nav, footer and home while false. */
+export const showProjects = false;
+
 export const content = {
   name: "Michael Hong",
   tagline: "Cal Poly Business & Music student passionate about music technology.",
+  degreeSummary: "Business Administration major (Information Systems) with a Music minor at Cal Poly.",
+  location: "San Francisco Bay Area",
   email: "michaelhonggsq@gmail.com",
   linkedin: "https://www.linkedin.com/in/michaelhong170/",
   instagram: "https://www.instagram.com/michael.honggg/",
@@ -8,7 +13,7 @@ export const content = {
   about: {
     bio: "My name is Michael Hong and I'm a third year business student at Cal Poly! I'm from Dublin, California (Bay Area) and I'd love to work in the music industry when I'm older, more specifically music technology. I am currently interning at Protiviti in San Francisco as a technology consulting intern, and in my free time I like to go to the gym, play music, and go on spontaneous adventures!",
     highlights: [
-      "3.88 GPA — Dean's List 9x, President's List 3x",
+      "3.88 GPA, Dean's List 9x, President's List 3x",
       "Technology Consulting Intern at Protiviti",
       "Interests in music, calisthenics, and spontaneous adventures",
     ],
@@ -261,27 +266,6 @@ export const content = {
     },
   ],
 
-  gallery: [
-    "/About Me Page/gallery photos/260527-APP-1078_w.jpg",
-    "/About Me Page/gallery photos/DSC00197.jpeg",
-    "/About Me Page/gallery photos/DSCF3744 (1).jpeg",
-    "/About Me Page/gallery photos/IMG_0797.jpeg",
-    "/About Me Page/gallery photos/IMG_1739.jpeg",
-    "/About Me Page/gallery photos/IMG_1940.jpeg",
-    "/About Me Page/gallery photos/IMG_2346.jpeg",
-    "/About Me Page/gallery photos/IMG_2576.jpeg",
-    "/About Me Page/gallery photos/IMG_2750.jpeg",
-    "/About Me Page/gallery photos/IMG_2774.jpeg",
-    "/About Me Page/gallery photos/IMG_3121.jpeg",
-    "/About Me Page/gallery photos/IMG_3157.jpeg",
-    "/About Me Page/gallery photos/IMG_3437.jpeg",
-    "/About Me Page/gallery photos/IMG_3602.jpeg",
-    "/About Me Page/gallery photos/IMG_5838.jpeg",
-    "/About Me Page/gallery photos/IMG_6331.jpeg",
-    "/About Me Page/gallery photos/IMG_8239.jpeg",
-    "/About Me Page/gallery photos/IMG_9313.jpeg",
-  ],
-
   skills: ["Microsoft Office Suite (Excel, Outlook)", "Google Workspace", "SQL", "Python", "Tableau", "Canva", "Claude", "PowerPoint", "Slack", "Zoom"],
 
   interests: [
@@ -293,7 +277,7 @@ export const content = {
     { name: "Soccer",              type: "image", src: "", photos: [] as string[], description: "I've played soccer from 1st grade all the way through my senior year of high school. What once started as a sport my mom signed me up for without my knowledge, it has since become one of my favorite physical activities. Messi > Ronaldo" },
   ],
 
-  // Placeholders — fill in title/type/description. For playback, use either audioSrc (a raw
+  // Placeholders: fill in title/type/description. For playback, use either audioSrc (a raw
   // mp3/wav file in public/, plays inline with a custom player) or embedUrl (a Spotify/SoundCloud/
   // YouTube embed link, renders as an iframe). link adds an external "Listen" button.
   projects: [

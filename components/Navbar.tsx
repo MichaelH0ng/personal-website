@@ -4,9 +4,9 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { content } from "@/config/content";
+import { showProjects } from "@/config/content";
 
-const navLinks = [
+const allNavLinks = [
   {
     label: "Home",
     href: "/",
@@ -36,6 +36,15 @@ const navLinks = [
     ),
   },
   {
+    label: "Projects",
+    href: "/projects",
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+      </svg>
+    ),
+  },
+  {
     label: "Contact",
     href: "/contact",
     icon: (
@@ -46,6 +55,12 @@ const navLinks = [
   },
 ];
 
+const navLinks = allNavLinks.filter((l) => showProjects || l.href !== "/projects");
+
+function isActive(pathname: string, href: string) {
+  return href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
+}
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -53,22 +68,28 @@ export default function Navbar() {
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    if (!menuOpen) return () => { document.body.style.overflow = ""; };
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setMenuOpen(false); };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKey);
+    };
   }, [menuOpen]);
 
   return (
     <>
       <header
-        className="fixed top-0 left-0 right-0 z-50 bg-black shadow-sm backdrop-blur-md"
+        className="fixed top-0 left-0 right-0 z-50 bg-black shadow-sm"
       >
         <motion.div
-          className="absolute bottom-0 left-0 right-0 h-[4px] bg-gradient-to-r from-transparent via-green-400 to-transparent"
+          className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-green-400 to-transparent"
           initial={{ scaleX: 0, opacity: 0 }}
           animate={{ scaleX: scrolled ? 1 : 0, opacity: scrolled ? 1 : 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
@@ -77,7 +98,8 @@ export default function Navbar() {
         <nav className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link
             href="/"
-            className="text-lg font-bold tracking-tight bg-gradient-to-r from-green-500 to-green-600 bg-clip-text text-transparent rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
+            aria-label="Michael Hong, home"
+            className="text-lg font-bold tracking-tight text-green-400 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
           >
             MH
           </Link>
@@ -85,7 +107,7 @@ export default function Navbar() {
           {/* Desktop */}
           <ul className="hidden md:flex gap-8">
             {navLinks.map((link) => {
-              const active = pathname === link.href;
+              const active = isActive(pathname, link.href);
               return (
                 <motion.li
                   key={link.href}
@@ -96,14 +118,12 @@ export default function Navbar() {
                 >
                   <Link
                     href={link.href}
-                    className={`flex items-center gap-1.5 text-sm font-medium transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 ${
-                      active
-                        ? "bg-gradient-to-r from-green-600 to-green-500 bg-clip-text text-transparent"
-                        : "text-white hover:text-gray-200"
+                    className={`flex items-center gap-1.5 text-sm font-medium transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black ${
+                      active ? "text-green-400" : "text-white hover:text-gray-200"
                     }`}
                   >
                     <motion.span
-                      className={active ? "text-green-500" : "text-white"}
+                      className={active ? "text-green-400" : "text-white"} aria-hidden="true"
                       variants={{
                         rest: { y: 0, scale: 1, rotate: 0 },
                         hover: { y: -3, scale: 1.2, rotate: -5 },
@@ -133,9 +153,10 @@ export default function Navbar() {
 
           {/* Mobile hamburger */}
           <button
-            className="md:hidden text-white rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
+            className="md:hidden -mr-2 p-2 text-white rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500"
             onClick={() => setMenuOpen(true)}
             aria-label="Open menu"
+            aria-expanded={menuOpen}
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -149,7 +170,7 @@ export default function Navbar() {
         {menuOpen && (
           <>
             <motion.div
-              className="fixed inset-0 z-50 bg-black/50 md:hidden"
+              className="fixed inset-0 z-[55] bg-black/50 md:hidden"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -157,19 +178,22 @@ export default function Navbar() {
               onClick={() => setMenuOpen(false)}
             />
             <motion.div
-              className="fixed top-0 right-0 bottom-0 z-50 w-72 bg-black shadow-2xl flex flex-col md:hidden"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Site menu"
+              className="fixed top-0 right-0 bottom-0 z-[60] w-72 bg-black shadow-2xl flex flex-col md:hidden"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
               <div className="flex items-center justify-between px-6 h-16 border-b border-gray-800">
-                <span className="text-lg font-bold bg-gradient-to-r from-green-500 to-green-600 bg-clip-text text-transparent">
+                <span className="text-lg font-bold text-green-400">
                   MH
                 </span>
                 <button
                   onClick={() => setMenuOpen(false)}
-                  className="text-gray-400 hover:text-white transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500"
+                  className="p-2 -mr-2 text-gray-300 hover:text-white transition-colors rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500"
                   aria-label="Close menu"
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -179,7 +203,7 @@ export default function Navbar() {
               </div>
               <ul className="flex flex-col gap-1 px-4 pt-6">
                 {navLinks.map((link, i) => {
-                  const active = pathname === link.href;
+                  const active = isActive(pathname, link.href);
                   return (
                     <motion.li
                       key={link.href}
@@ -196,7 +220,7 @@ export default function Navbar() {
                           }`}
                         >
                           <motion.span
-                            className={active ? "text-green-400" : "text-gray-500"}
+                            className={active ? "text-green-400" : "text-gray-400"} aria-hidden="true"
                             variants={{
                               rest: { y: 0, scale: 1, rotate: 0 },
                               hover: { y: -3, scale: 1.2, rotate: -5 },

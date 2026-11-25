@@ -6,7 +6,8 @@ import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } fro
 import { content } from "@/config/content";
 import { InterestsPanel } from "@/components/InterestsPanel";
 import Masonry from "@/components/Masonry";
-import ShinyText from "@/components/ShinyText";
+import GlassCard from "@/components/GlassCard";
+import SectionHeading from "@/components/SectionHeading";
 
 const galleryItems = [
   { id: 1,  img: "/About Me Page/gallery photos/260527-APP-1078_w.jpg", height: 660, url: "/About Me Page/gallery photos/260527-APP-1078_w.jpg" },
@@ -74,6 +75,7 @@ function TiltPhoto({ reduceMotion }: { reduceMotion: boolean }) {
   const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-12, 12]), { stiffness: 300, damping: 30 });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (reduceMotion) return;
     const rect = e.currentTarget.getBoundingClientRect();
     x.set((e.clientX - rect.left) / rect.width - 0.5);
     y.set((e.clientY - rect.top) / rect.height - 0.5);
@@ -92,13 +94,14 @@ function TiltPhoto({ reduceMotion }: { reduceMotion: boolean }) {
             backgroundSize: "300% 300%",
             animation: reduceMotion ? "none" : "gradientShift 5s ease infinite",
           }}
-          className="rounded-2xl p-[2px] shadow-lg min-h-[280px] h-full cursor-pointer"
+          className="rounded-2xl p-[2px] shadow-lg min-h-[280px] h-full"
         >
           <div className="relative rounded-[14px] overflow-hidden h-full min-h-[280px]">
             <Image
               src="/about-photo.jpg"
-              alt="Michael Hong"
+              alt="Michael Hong smiling outdoors"
               fill
+              sizes="(min-width: 1024px) 480px, 100vw"
               className="object-cover object-center"
             />
           </div>
@@ -107,52 +110,20 @@ function TiltPhoto({ reduceMotion }: { reduceMotion: boolean }) {
   );
 }
 
-const bioVariants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.025 } },
-};
-
-const wordVariant = {
-  hidden: { opacity: 0, y: 10 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.25, ease: [0.25, 0.1, 0.25, 1] as const } },
-};
-
 function SectionDivider() {
-  return (
-    <div className="relative my-16">
-      <div className="absolute inset-0 flex items-center">
-        <div className="w-full h-px bg-gradient-to-r from-transparent via-green-500/25 to-transparent" />
-      </div>
-    </div>
-  );
+  return <div className="my-16 h-px w-full bg-gradient-to-r from-transparent via-green-500/25 to-transparent" aria-hidden="true" />;
 }
 
 export default function About() {
   const shouldReduceMotion = useReducedMotion() ?? false;
 
   return (
-    <section id="about" className="relative pt-4 pb-24 overflow-hidden">
+    <section id="about" className="relative py-20 overflow-hidden">
 
-      <div id="about-content" className="relative max-w-5xl mx-auto px-6 pt-20">
+      <div id="about-content" className="relative max-w-5xl mx-auto px-6">
 
         {/* Header */}
-        <motion.div
-          className="mb-12"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.45, ease: "easeOut" }}
-        >
-          <h2 className="text-3xl font-bold"><ShinyText text="About Me" color="#ffffff" shineColor="#4ade80" speed={4} /></h2>
-          <motion.div
-            className="h-0.5 w-16 bg-gradient-to-r from-green-600 to-green-400 rounded-full mt-3"
-            initial={{ scaleX: 0 }}
-            whileInView={{ scaleX: 1 }}
-            viewport={{ once: true }}
-            style={{ originX: 0.5 }}
-            transition={{ duration: 0.5, ease: "easeOut", delay: 0.25 }}
-          />
-        </motion.div>
+        <SectionHeading title="About Me" as="h1" className="mb-12" />
 
         {/* Photo + Bio grid */}
         <div className="grid lg:grid-cols-2 gap-6 items-stretch">
@@ -167,13 +138,13 @@ export default function About() {
             <TiltPhoto reduceMotion={shouldReduceMotion} />
 
             {/* Highlights card */}
-            <div className="flex-1 rounded-2xl border border-green-500/30 bg-black/50 backdrop-blur-sm p-5">
-              <p className="text-xs font-semibold uppercase tracking-widest text-green-400/70 mb-4">Highlights</p>
+            <GlassCard className="flex-1 p-5">
+              <h2 className="text-xs font-semibold uppercase tracking-widest text-green-300 mb-4">Highlights</h2>
               <ul className="flex flex-col gap-3">
-                {content.about.highlights.slice(0, 3).map((item, i) => (
+                {content.about.highlights.map((item, i) => (
                   <motion.li
                     key={i}
-                    className="flex items-start gap-3 text-sm text-gray-300"
+                    className="flex items-start gap-3 text-sm text-muted"
                     initial={{ opacity: 0, x: -12 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
@@ -184,7 +155,7 @@ export default function About() {
                   </motion.li>
                 ))}
               </ul>
-            </div>
+            </GlassCard>
           </motion.div>
 
           {/* Bio card */}
@@ -193,30 +164,13 @@ export default function About() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className="rounded-2xl border border-green-500/30 bg-black/50 backdrop-blur-sm"
           >
-            <div className="flex flex-col items-start p-7 h-full">
+            <GlassCard className="flex flex-col items-start p-7 h-full">
 
-              {/* Bio text */}
-              <motion.p
-                className="text-gray-300 leading-relaxed text-lg"
-                variants={shouldReduceMotion ? undefined : bioVariants}
-                initial={shouldReduceMotion ? { opacity: 0 } : "hidden"}
-                whileInView={shouldReduceMotion ? { opacity: 1 } : "visible"}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={shouldReduceMotion ? { duration: 0.4, ease: "easeOut" } : undefined}
-              >
-                {shouldReduceMotion
-                  ? content.about.bio
-                  : content.about.bio.split(" ").map((word, i) => (
-                      <motion.span key={i} variants={wordVariant} className="inline-block mr-[0.28em]">
-                        {word}
-                      </motion.span>
-                    ))}
-              </motion.p>
+              <p className="text-muted leading-relaxed text-lg">{content.about.bio}</p>
 
               {/* Quick facts */}
-              <div className="w-full mt-6 pt-5 border-t border-white/10 flex flex-col gap-3">
+              <div className="w-full mt-6 pt-5 border-t border-white/15 flex flex-col gap-3">
                 {quickFacts.map((fact, i) => (
                   <motion.div
                     key={i}
@@ -227,7 +181,7 @@ export default function About() {
                     transition={{ duration: 0.35, delay: 0.5 + i * 0.08, ease: "easeOut" }}
                   >
                     <span className="text-green-400 flex-shrink-0">{fact.icon}</span>
-                    <span className="text-gray-300">{fact.text}</span>
+                    <span className="text-muted">{fact.text}</span>
                   </motion.div>
                 ))}
               </div>
@@ -235,46 +189,31 @@ export default function About() {
               {/* CTA */}
               <Link
                 href="/contact"
-                className="mt-6 inline-flex items-center gap-2 bg-gradient-to-r from-green-600 to-green-500 text-white font-medium px-6 py-3 rounded-xl shadow-sm hover:shadow-md hover:from-green-700 hover:to-green-600 active:scale-[0.97] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
+                className="mt-6 inline-flex items-center gap-2 bg-gradient-to-r from-green-600 to-green-500 text-white font-medium px-6 py-3 rounded-xl shadow-sm hover:shadow-md hover:from-green-700 hover:to-green-600 active:scale-[0.97] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
               >
                 Get in Touch
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </Link>
-            </div>
+            </GlassCard>
           </motion.div>
         </div>
 
         <SectionDivider />
 
-        {/* Quote card */}
-        <motion.div
-          className="relative rounded-2xl border border-green-500/50 bg-green-950/35 backdrop-blur-sm overflow-hidden cursor-default"
+        {/* Quote */}
+        <motion.figure
+          className="rounded-2xl border border-green-500/40 bg-green-950/40 backdrop-blur-sm px-6 py-10 sm:px-12 text-center"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          whileHover={{ boxShadow: "0 0 48px rgba(74,222,128,0.22)" }}
         >
-          {/* Top accent bar */}
-          <div className="h-1 bg-gradient-to-r from-green-600 via-green-400 to-green-600" />
-
-          {/* Radial glow */}
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div className="w-[32rem] h-32 bg-green-500/8 rounded-full blur-3xl" />
-          </div>
-
-          {/* Decorative quote marks */}
-          <span className="absolute select-none pointer-events-none font-serif text-[10rem] leading-none top-0 left-4 text-green-400/20" aria-hidden="true">&ldquo;</span>
-          <span className="absolute select-none pointer-events-none font-serif text-[10rem] leading-none -bottom-16 right-4 text-green-400/20" aria-hidden="true">&rdquo;</span>
-
-          <div className="relative px-12 py-12 text-center">
-            <p className="text-2xl md:text-3xl italic text-white font-light leading-relaxed">
-              Don&apos;t spend your time chasing butterflies, mend your garden and the butterflies will come.
-            </p>
-          </div>
-        </motion.div>
+          <blockquote className="text-2xl md:text-3xl italic text-white font-light leading-relaxed">
+            &ldquo;Don&apos;t spend your time chasing butterflies, mend your garden and the butterflies will come.&rdquo;
+          </blockquote>
+        </motion.figure>
 
         <SectionDivider />
 
@@ -285,18 +224,8 @@ export default function About() {
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.45, ease: "easeOut" }}
         >
-          <div className="mb-8">
-            <h2 className="text-3xl font-bold"><ShinyText text="My Interests" color="#ffffff" shineColor="#4ade80" speed={4} /></h2>
-            <motion.div
-              className="h-0.5 w-16 bg-gradient-to-r from-green-600 to-green-400 rounded-full mt-3"
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              viewport={{ once: true }}
-              style={{ originX: 0.5 }}
-              transition={{ duration: 0.5, ease: "easeOut", delay: 0.25 }}
-            />
-          </div>
-          <div className="lg:-mx-16">
+          <SectionHeading title="My Interests" className="mb-8" />
+          <div>
             <InterestsPanel interests={content.interests} />
           </div>
         </motion.div>
@@ -310,15 +239,7 @@ export default function About() {
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.45, ease: "easeOut" }}
         >
-          <h2 className="text-3xl font-bold mb-1"><ShinyText text="Gallery" color="#ffffff" shineColor="#4ade80" speed={4} /></h2>
-          <motion.div
-            className="h-0.5 w-16 bg-gradient-to-r from-green-600 to-green-400 rounded-full mt-3 mb-6"
-            initial={{ scaleX: 0 }}
-            whileInView={{ scaleX: 1 }}
-            viewport={{ once: true }}
-            style={{ originX: 0.5 }}
-            transition={{ duration: 0.5, ease: "easeOut", delay: 0.25 }}
-          />
+          <SectionHeading title="Gallery" className="mb-6" />
           <Masonry
             items={galleryItems}
             animateFrom="random"

@@ -142,7 +142,7 @@ export default function ShaderBackground() {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const gl = canvas.getContext("webgl");
+    const gl = canvas.getContext("webgl", { antialias: false, powerPreference: "low-power" });
     if (!gl) return;
 
     const program = initShaderProgram(gl, vsSource, fsSource);
@@ -156,43 +156,88 @@ export default function ShaderBackground() {
     const resolution = gl.getUniformLocation(program, "iResolution");
     const time = gl.getUniformLocation(program, "iTime");
 
-    const resizeCanvas = () => {
-      canvas.width = window.innerWidth + 32;
-      canvas.height = window.innerHeight + 32;
-      gl.viewport(0, 0, canvas.width, canvas.height);
-    };
-    window.addEventListener("resize", resizeCanvas);
-    resizeCanvas();
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let reduceMotion = motionQuery.matches;
+    let animId = 0;
+    let running = false;
+    const startTime = performance.now();
+    // The background is soft, so render fewer pixels (cheaper on phones) and let CSS scale it up.
+    const pixelScale = () => (window.innerWidth < 768 ? 0.4 : 0.6);
 
-    let animId: number;
-    const startTime = Date.now();
-
-    const render = () => {
-      const currentTime = (Date.now() - startTime) / 1000;
+    const draw = (seconds: number) => {
       gl.clearColor(0, 0, 0, 1);
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.useProgram(program);
       gl.uniform2f(resolution, canvas.width, canvas.height);
-      gl.uniform1f(time, currentTime);
+      gl.uniform1f(time, seconds);
       gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
       gl.vertexAttribPointer(vertexPosition, 2, gl.FLOAT, false, 0, 0);
       gl.enableVertexAttribArray(vertexPosition);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-      animId = requestAnimationFrame(render);
     };
 
-    animId = requestAnimationFrame(render);
+    const loop = () => {
+      draw((performance.now() - startTime) / 1000);
+      animId = requestAnimationFrame(loop);
+    };
+
+    const start = () => {
+      if (running || reduceMotion || document.hidden) return;
+      running = true;
+      animId = requestAnimationFrame(loop);
+    };
+
+    const stop = () => {
+      running = false;
+      cancelAnimationFrame(animId);
+    };
+
+    const resizeCanvas = () => {
+      const scale = pixelScale();
+      canvas.width = Math.max(1, Math.round((window.innerWidth + 32) * scale));
+      canvas.height = Math.max(1, Math.round((window.innerHeight + 32) * scale));
+      gl.viewport(0, 0, canvas.width, canvas.height);
+      // Reduced motion (or paused): keep one still frame on screen.
+      if (!running) draw(4);
+    };
+
+    const onVisibility = () => (document.hidden ? stop() : start());
+    const onMotionChange = (e: MediaQueryListEvent) => {
+      reduceMotion = e.matches;
+      if (reduceMotion) {
+        stop();
+        draw(4);
+      } else {
+        start();
+      }
+    };
+    const onContextLost = (e: Event) => {
+      e.preventDefault();
+      stop();
+    };
+
+    window.addEventListener("resize", resizeCanvas);
+    document.addEventListener("visibilitychange", onVisibility);
+    motionQuery.addEventListener("change", onMotionChange);
+    canvas.addEventListener("webglcontextlost", onContextLost);
+
+    resizeCanvas();
+    start();
 
     return () => {
-      cancelAnimationFrame(animId);
+      stop();
       window.removeEventListener("resize", resizeCanvas);
+      document.removeEventListener("visibilitychange", onVisibility);
+      motionQuery.removeEventListener("change", onMotionChange);
+      canvas.removeEventListener("webglcontextlost", onContextLost);
     };
   }, []);
 
   return (
     <canvas
       ref={canvasRef}
-      className="-z-10 blur-md"
+      aria-hidden="true"
+      className="-z-10 blur-[3px]"
       style={{
         position: "fixed",
         top: -16,
