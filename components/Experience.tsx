@@ -7,7 +7,6 @@ import { cn } from "@/lib/utils";
 import { groupByOrg, isCurrent, rangeDuration, spanDuration } from "@/lib/experience";
 import GlassCard from "@/components/GlassCard";
 import OrgLogo from "@/components/OrgLogo";
-import SectionHeading from "@/components/SectionHeading";
 
 const rowVariants = {
   hidden: { opacity: 0, y: 14 },
@@ -300,6 +299,13 @@ function RoleList({ sectionKey, roles, openKey, onToggle }: { sectionKey: string
 const workRoles: Role[] = content.experience.map((e) => ({ ...e, org: e.company }));
 const leadershipRoles: Role[] = content.leadership;
 
+/** Italic serif title with the green gradient used for the name on the home hero. */
+const gradientTitle = "bg-gradient-to-r from-green-300 to-green-400 bg-clip-text text-transparent italic font-bold pr-2 box-decoration-clone drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]";
+const playfair = { fontFamily: "var(--font-playfair)" };
+
+const linkButton =
+  "inline-flex items-center gap-2 border border-green-400/50 text-green-300 text-sm font-medium px-4 py-2.5 rounded-xl hover:bg-green-500/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black";
+
 function SectionCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <motion.section
@@ -310,16 +316,16 @@ function SectionCard({ title, children }: { title: string; children: React.React
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.4, ease: "easeOut" }}
     >
-      <h2 className="text-xl font-semibold text-white mb-3">{title}</h2>
+      <div className="flex items-center gap-4 mb-4">
+        <h2 className={cn(gradientTitle, "text-2xl sm:text-3xl leading-tight")} style={playfair}>{title}</h2>
+        <span className="flex-1 h-px bg-gradient-to-r from-green-400/60 to-transparent" aria-hidden="true" />
+      </div>
       <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-60px" }}>
         <GlassCard className="rounded-xl border-l-4 border-l-green-500">{children}</GlassCard>
       </motion.div>
     </motion.section>
   );
 }
-
-const linkButton =
-  "inline-flex items-center gap-2 border border-green-400/50 text-green-300 text-sm font-medium px-4 py-2.5 rounded-xl hover:bg-green-500/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black";
 
 export default function Experience() {
   const [openKey, setOpenKey] = useState<string | null>(null);
@@ -344,7 +350,15 @@ export default function Experience() {
 
         {/* Header */}
         <div className="flex flex-wrap items-end justify-between gap-4 mb-10">
-          <SectionHeading title="Experience" as="h1" />
+          <motion.h1
+            className={cn(gradientTitle, "text-4xl sm:text-5xl leading-tight")}
+            style={playfair}
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+          >
+            Experience
+          </motion.h1>
           <div className="flex gap-3">
             <a href={content.linkedin} target="_blank" rel="noopener noreferrer" className={linkButton}>
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
