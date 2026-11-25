@@ -2,10 +2,8 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { content } from "@/config/content";
-import { entrySlug } from "@/lib/slugs";
 import GlassCard from "@/components/GlassCard";
 import SectionHeading from "@/components/SectionHeading";
 
@@ -39,7 +37,6 @@ function ExperienceRow({
   dates,
   bullets,
   stats,
-  detailHref,
   isOpen,
   onToggle,
 }: {
@@ -51,7 +48,6 @@ function ExperienceRow({
   dates: string;
   bullets: string[];
   stats: { value: string; label: string }[];
-  detailHref: string;
   isOpen: boolean;
   onToggle: () => void;
 }) {
@@ -118,15 +114,6 @@ function ExperienceRow({
                   ))}
                 </ul>
               )}
-              <Link
-                href={detailHref}
-                className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-green-300 hover:text-green-200 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
-              >
-                View details
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
             </div>
           </motion.div>
         )}
@@ -210,7 +197,6 @@ export default function Experience() {
               dates={edu.dates}
               bullets={edu.bullets}
               stats={edu.stats}
-              detailHref={`/experience/${entrySlug(edu.school, edu.degree)}`}
               isOpen={openKey === `edu-${i}`}
               onToggle={() => toggle(`edu-${i}`)}
             />
@@ -229,7 +215,6 @@ export default function Experience() {
               dates={job.dates}
               bullets={job.bullets}
               stats={job.stats}
-              detailHref={`/experience/${entrySlug(job.title, job.company)}`}
               isOpen={openKey === `work-${i}`}
               onToggle={() => toggle(`work-${i}`)}
             />
@@ -248,7 +233,6 @@ export default function Experience() {
               dates={role.dates}
               bullets={role.bullets}
               stats={role.stats}
-              detailHref={`/experience/${entrySlug(role.title, role.org)}`}
               isOpen={openKey === `lead-${i}`}
               onToggle={() => toggle(`lead-${i}`)}
             />
