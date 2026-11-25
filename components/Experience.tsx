@@ -166,6 +166,15 @@ function ExperienceRow({
   );
 }
 
+function RoleTitle({ title, dates }: { title: string; dates: string }) {
+  return (
+    <div className="flex-1 min-w-0">
+      <h4 className="font-semibold text-white text-[0.95rem] leading-6">{title}</h4>
+      <DateLine dates={dates} />
+    </div>
+  );
+}
+
 // Vertical position of a role's timeline dot, lined up with its title text.
 const DOT_Y = 24;
 
@@ -233,18 +242,21 @@ function ExperienceGroup({
               </div>
 
               <div className="flex-1 min-w-0 ml-1">
-                <button
-                  onClick={() => onToggle(key)}
-                  aria-expanded={isOpen}
-                  aria-controls={panelId}
-                  className={cn(toggleButton, "py-3 px-3 cursor-pointer hover:bg-green-700/20")}
-                >
-                  <div className="flex-1 min-w-0">
-                    <h4 className="font-semibold text-white text-[0.95rem] leading-6">{role.title}</h4>
-                    <DateLine dates={role.dates} />
+                {role.bullets.length > 0 || role.stats.length > 0 ? (
+                  <button
+                    onClick={() => onToggle(key)}
+                    aria-expanded={isOpen}
+                    aria-controls={panelId}
+                    className={cn(toggleButton, "py-3 px-3 cursor-pointer hover:bg-green-700/20")}
+                  >
+                    <RoleTitle title={role.title} dates={role.dates} />
+                    <Chevron isOpen={isOpen} />
+                  </button>
+                ) : (
+                  <div className="py-3 px-3">
+                    <RoleTitle title={role.title} dates={role.dates} />
                   </div>
-                  <Chevron isOpen={isOpen} />
-                </button>
+                )}
                 <DetailsPanel id={panelId} isOpen={isOpen} stats={role.stats} bullets={role.bullets} className="px-3 pb-4 pt-1" />
               </div>
             </li>
