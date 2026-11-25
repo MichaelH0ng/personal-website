@@ -300,8 +300,22 @@ const workRoles: Role[] = content.experience.map((e) => ({ ...e, org: e.company 
 const leadershipRoles: Role[] = content.leadership;
 
 /** Italic serif title with the green gradient used for the name on the home hero. */
-const gradientTitle = "bg-gradient-to-r from-green-300 to-green-400 bg-clip-text text-transparent italic font-bold pr-2 box-decoration-clone drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]";
-const playfair = { fontFamily: "var(--font-playfair)" };
+const gradientTitle = "bg-gradient-to-r from-green-100 via-green-200 to-green-300 bg-clip-text text-transparent italic font-bold pr-2 box-decoration-clone";
+// Font plus a tight dark outline and a wider dark glow so the letters stand off the animated background.
+const playfair = {
+  fontFamily: "var(--font-playfair)",
+  filter: "drop-shadow(0 1px 1px rgba(0,0,0,0.9)) drop-shadow(0 0 10px rgba(0,0,0,0.75))",
+};
+
+/** Soft, edgeless dark patch behind a heading so it stays readable over bright parts of the background. */
+function Haze({ children, className }: { children: React.ReactNode; className?: string }) {
+  return (
+    <div className={cn("relative isolate", className)}>
+      <span className="absolute -inset-x-6 -inset-y-4 -z-10 rounded-full bg-black/55 blur-2xl" aria-hidden="true" />
+      {children}
+    </div>
+  );
+}
 
 const linkButton =
   "inline-flex items-center gap-2 border border-green-400/50 text-green-300 text-sm font-medium px-4 py-2.5 rounded-xl hover:bg-green-500/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black";
@@ -317,7 +331,9 @@ function SectionCard({ title, children }: { title: string; children: React.React
       transition={{ duration: 0.4, ease: "easeOut" }}
     >
       <div className="flex items-center gap-4 mb-4">
-        <h2 className={cn(gradientTitle, "text-2xl sm:text-3xl leading-tight")} style={playfair}>{title}</h2>
+        <Haze>
+          <h2 className={cn(gradientTitle, "text-2xl sm:text-3xl leading-tight")} style={playfair}>{title}</h2>
+        </Haze>
         <span className="flex-1 h-px bg-gradient-to-r from-green-400/60 to-transparent" aria-hidden="true" />
       </div>
       <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-60px" }}>
@@ -350,15 +366,17 @@ export default function Experience() {
 
         {/* Header */}
         <div className="flex flex-wrap items-end justify-between gap-4 mb-10">
-          <motion.h1
-            className={cn(gradientTitle, "text-4xl sm:text-5xl leading-tight")}
-            style={playfair}
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-          >
-            Experience
-          </motion.h1>
+          <Haze>
+            <motion.h1
+              className={cn(gradientTitle, "text-4xl sm:text-5xl leading-tight")}
+              style={playfair}
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+            >
+              Experience
+            </motion.h1>
+          </Haze>
           <div className="flex gap-3">
             <a href={content.linkedin} target="_blank" rel="noopener noreferrer" className={linkButton}>
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
