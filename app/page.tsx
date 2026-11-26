@@ -88,12 +88,12 @@ export default function Home() {
                   }}
                 />
 
-                <div className="relative w-48 h-48 sm:w-72 sm:h-72 lg:w-[22rem] lg:h-[22rem] xl:w-52 xl:h-52 2xl:w-64 2xl:h-64 rounded-full overflow-hidden z-10">
+                <div className="relative w-48 h-48 sm:w-72 sm:h-72 lg:w-72 lg:h-72 xl:w-52 xl:h-52 2xl:w-64 2xl:h-64 rounded-full overflow-hidden z-10">
                   <Image
                     src="/MichaelHong_OCOBHeadshot.jpeg"
                     alt="Michael Hong"
                     fill
-                    sizes="(min-width: 1536px) 256px, (min-width: 1280px) 208px, (min-width: 1024px) 352px, (min-width: 640px) 288px, 192px"
+                    sizes="(min-width: 1536px) 256px, (min-width: 1280px) 208px, (min-width: 1024px) 288px, (min-width: 640px) 288px, 192px"
                     className="object-cover object-[center_10%]"
                     priority
                   />
@@ -111,7 +111,7 @@ export default function Home() {
                 </motion.p>
 
                 <motion.h1
-                  className="whitespace-nowrap text-[1.625rem] sm:text-[2.75rem] lg:text-[3.5rem] xl:text-5xl 2xl:text-[3.5rem] font-bold text-white leading-tight"
+                  className="whitespace-nowrap text-[1.625rem] sm:text-[2.75rem] lg:text-[2.5rem] xl:text-5xl 2xl:text-[3.5rem] font-bold text-white leading-tight"
                   initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.15, ease: "easeOut" }}
                 >
