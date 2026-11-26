@@ -69,7 +69,7 @@ export function InterestsPanel({ interests }: { interests: Interest[] }) {
 
         {/* Left nav list — slides in from left with staggered items */}
         <motion.div
-          className="flex flex-col gap-1 rounded-2xl border border-green-500/30 bg-black/55 backdrop-blur-sm p-3"
+          className="flex flex-col gap-1 rounded-2xl border border-green-500/30 bg-black/95 backdrop-blur-md p-3"
           variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.08 } } }}
           initial="hidden"
           whileInView="visible"
@@ -107,7 +107,7 @@ export function InterestsPanel({ interests }: { interests: Interest[] }) {
 
         {/* Right detail panel — slides in from right */}
         <motion.div
-          className="rounded-2xl border border-green-500/30 bg-black/55 backdrop-blur-sm overflow-hidden"
+          className="rounded-2xl border border-green-500/30 bg-black/95 backdrop-blur-md overflow-hidden"
           initial={{ opacity: 0, x: 40 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, margin: "-60px" }}
@@ -148,7 +148,7 @@ export function InterestsPanel({ interests }: { interests: Interest[] }) {
           return (
             <motion.div
               key={interest.name}
-              className="rounded-2xl border border-green-500/30 bg-black/55 backdrop-blur-sm overflow-hidden"
+              className="rounded-2xl border border-green-500/30 bg-black/95 backdrop-blur-md overflow-hidden"
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}

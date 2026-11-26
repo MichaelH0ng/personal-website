@@ -204,7 +204,7 @@ export default function About() {
 
         {/* Quote */}
         <motion.figure
-          className="rounded-2xl border border-green-500/40 bg-green-950/40 backdrop-blur-sm px-6 py-10 sm:px-12 text-center"
+          className="rounded-2xl border border-green-500/40 bg-black/95 backdrop-blur-sm px-6 py-10 sm:px-12 text-center"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}

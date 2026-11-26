@@ -234,17 +234,21 @@ export default function ShaderBackground() {
   }, []);
 
   return (
-    <canvas
-      ref={canvasRef}
-      aria-hidden="true"
-      className="-z-10 blur-[3px]"
-      style={{
-        position: "fixed",
-        top: -16,
-        left: -16,
-        width: "calc(100% + 32px)",
-        height: "calc(100% + 32px)",
-      }}
-    />
+    <>
+      <canvas
+        ref={canvasRef}
+        aria-hidden="true"
+        className="-z-10 blur-[3px]"
+        style={{
+          position: "fixed",
+          top: -16,
+          left: -16,
+          width: "calc(100% + 32px)",
+          height: "calc(100% + 32px)",
+        }}
+      />
+      {/* Dark tint over the animation so text on the page stays readable. Raise or lower the opacity to taste. */}
+      <div aria-hidden="true" className="fixed inset-0 -z-10 bg-black/40 pointer-events-none" />
+    </>
   );
 }

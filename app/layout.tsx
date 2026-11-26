@@ -17,9 +17,24 @@ const playfairDisplay = Playfair_Display({
   weight: ["700"],
 });
 
+const siteTitle = "Michael Hong | Business & Information Systems, Cal Poly";
+const siteDescription =
+  "Business Administration student at Cal Poly (Information Systems, Music minor, Class of 2027). Former technology consulting intern at Protiviti, building toward a career in music technology.";
+
 export const metadata: Metadata = {
-  title: "Michael Hong",
-  description: "Business Administration student at Cal Poly with a concentration in Information Systems and a Minor in Music, passionate about music technology.",
+  title: siteTitle,
+  description: siteDescription,
+  // The link-preview image comes from app/opengraph-image.tsx.
+  openGraph: {
+    title: siteTitle,
+    description: siteDescription,
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteTitle,
+    description: siteDescription,
+  },
 };
 
 export default function RootLayout({

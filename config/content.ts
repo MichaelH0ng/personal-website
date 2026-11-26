@@ -10,21 +10,61 @@ export const content = {
   linkedin: "https://www.linkedin.com/in/michaelhong170/",
   instagram: "https://www.instagram.com/michael.honggg/",
 
+  /** Home page hero: the line shown above your name (also used on the link-preview image). */
+  hero: {
+    eyebrow: "Business + Information Systems @ Cal Poly · Class of 2027",
+  },
+
   about: {
-    bio: "My name is Michael Hong and I'm a third year business student at Cal Poly! I'm from Dublin, California (Bay Area) and I'd love to work in the music industry when I'm older, more specifically music technology. I am currently interning at Protiviti in San Francisco as a technology consulting intern, and in my free time I like to go to the gym, play music, and go on spontaneous adventures!",
+    bio: "My name is Michael Hong and I'm a fourth year business student at Cal Poly! I'm from Dublin, California (Bay Area) and I'd love to work in the music industry when I'm older, more specifically music technology. Most recently I interned at Protiviti in San Francisco as a technology consulting intern, and in my free time I like to go to the gym, play music, and go on spontaneous adventures!",
     highlights: [
       "3.88 GPA, Dean's List 9x, President's List 3x",
-      "Technology Consulting Intern at Protiviti",
+      "Former Technology Consulting Intern at Protiviti",
       "Interests in music, calisthenics, and spontaneous adventures",
     ],
+    /** Shorter versions for the home page "A Bit About Me" section. The About page uses bio and highlights above. */
+    homeBio: "I'm a fourth year Business Administration student at Cal Poly from Dublin, California, studying Information Systems with a minor in Music. I want to build a career in music technology, and outside of class you'll find me at the gym, playing music, or on a spontaneous adventure.",
+    homeHighlights: [
+      "3.88 GPA, Dean's List 9x, President's List 3x",
+      "2025-26 All-Alpha Kappa Psi Academic Team: Team Captain",
+      "Graduating June 2027 with a B.S. in Business Administration",
+    ],
   },
+
+  /**
+   * Home page hero "Featured Work" grid. Each item points at an experience or leadership
+   * entry by its exact title + org (logo and stats come from that entry).
+   * Shown as a 2x2 grid beside the hero. Keep blurbs to one sentence of similar length (about 80-90 characters) so tiles line up.
+   */
+  featured: [
+    {
+      title: "Technology Consulting Intern",
+      org: "Protiviti",
+      blurb: "Assessed cybersecurity policies against CIS Controls for a pre-IPO semiconductor company.",
+    },
+    {
+      title: "Marketing Strategy Consulting Intern",
+      org: "Tifa Chocolate & Gelato",
+      blurb: "Ran Instagram strategy and AI-assisted video production for a local dessert shop.",
+    },
+    {
+      title: "President",
+      org: "Orfalea College of Business Student Ambassadors",
+      blurb: "Lead the 32-member team that represents the business college to prospective students and families.",
+    },
+    {
+      title: "Executive Vice-President",
+      org: "Alpha Kappa Psi Business Fraternity",
+      blurb: "Led the executive board running professional and philanthropic programs for the chapter.",
+    },
+  ],
 
   education: [
     {
       school: "California Polytechnic State University",
       location: "San Luis Obispo, CA",
       degree: "B.S. Business Administration: Information Systems | Minor: Music",
-      dates: "Sept. 2023 – Jun. 2027",
+      dates: "Sept. 2023 – May 2027",
       logo: "/logos/calpoly.jpeg",
       stats: [
         { value: "3.88", label: "GPA" },
@@ -39,7 +79,37 @@ export const content = {
     },
   ],
 
+  // Listed newest first. Entries with the same company/org are grouped LinkedIn-style on the
+  // Experience page (in the order they appear here). logo: "" shows the org's initials instead.
   experience: [
+    {
+      title: "Technology Consulting Intern",
+      company: "Protiviti",
+      location: "San Francisco, CA",
+      dates: "Jun. 2026 – Aug. 2026",
+      logo: "/logos/protiviti.jpeg",
+      photos: [] as string[],
+      stats: [
+        { value: "10", label: "Policies Assessed" },
+        { value: "18", label: "CIS Controls" },
+        { value: "5+", label: "Workstreams" },
+      ],
+      bullets: [
+        "Assessed 10 cybersecurity policies against 18 CIS Controls to support IPO readiness for a semiconductor company",
+        "Coordinated IPO-readiness activities across 5+ workstreams spanning cybersecurity, SOX, ERP, BCM, and governance",
+        "Produced executive-ready cybersecurity and governance deliverables for stakeholders supporting a pre-IPO transformation",
+      ],
+    },
+    {
+      title: "Student Ambassador",
+      company: "Adobe",
+      location: "San Luis Obispo, CA",
+      dates: "May 2026 – Present",
+      logo: "/logos/adobe.jpeg",
+      photos: [] as string[],
+      stats: [],
+      bullets: [] as string[],
+    },
     {
       title: "Career Peer Advisor",
       company: "Orfalea College of Business",
@@ -54,24 +124,6 @@ export const content = {
         "Assist 30+ students/month with resume/cover letter editing, job/internship search, networking, & (case) interviews",
         "Manage, update, and direct students to resource listing opportunities seeking students from diverse backgrounds",
         "Collaborate with 2+ managers, 5+ staff members, and 5+ clubs to increase outreach & awareness of center's resources",
-      ],
-    },
-    {
-      title: "Technology Consulting Intern",
-      company: "Protiviti",
-      location: "San Francisco, CA",
-      dates: "June 2026 – Aug. 2026",
-      logo: "/logos/protiviti.jpeg",
-      photos: [] as string[],
-      stats: [
-        { value: "10", label: "Policies Assessed" },
-        { value: "18", label: "CIS Controls" },
-        { value: "5+", label: "Workstreams" },
-      ],
-      bullets: [
-        "Assessed 10 cybersecurity policies against 18 CIS Controls to support IPO readiness for a semiconductor company",
-        "Coordinated IPO-readiness activities across 5+ workstreams spanning cybersecurity, SOX, ERP, BCM, and governance",
-        "Produced executive-ready cybersecurity and governance deliverables for stakeholders supporting a pre-IPO transformation",
       ],
     },
     {
@@ -111,9 +163,9 @@ export const content = {
     },
     {
       title: "Recruitment Ambassador",
-      company: "California Polytechnic State University (Cal Poly)",
+      company: "Cal Poly Admissions",
       location: "San Luis Obispo, CA",
-      dates: "Sep. 2025 – Mar. 2026",
+      dates: "Sept. 2025 – Mar. 2026",
       logo: "/logos/calpoly.jpeg",
       photos: [] as string[],
       stats: [
@@ -123,24 +175,6 @@ export const content = {
         "Executed large-scale recruitment events with admissions staff, supporting diversity, equity, and inclusion initiatives",
         "Coordinated 60+ members in the Mustang Mentorship Program, coordinating bi-monthly meetings and quarterly events",
         "Utilized Slate to verify thousands of forms and streamline digital workflows for on-campus events",
-      ],
-    },
-    {
-      title: "Campus Events Launcher",
-      company: "DoorDash",
-      location: "San Luis Obispo, CA",
-      dates: "Aug. 2024 – Dec. 2025",
-      logo: "/logos/doordash.jpeg",
-      photos: [] as string[],
-      stats: [
-        { value: "2,200+", label: "DashPass Signups" },
-        { value: "40+", label: "Events Executed" },
-        { value: "$10k+", label: "Market Share" },
-      ],
-      bullets: [
-        "Executed 40+ campus events, driving 2,200+ Student DashPass signups and increasing market share by over $10K",
-        "Built and maintained ongoing partnerships with 7+ student organizations, growing external signups by 12%",
-        "Maintained a cost per sale under $10 while tabling, ranking top 3 of 25+ schools in the bracket for signups",
       ],
     },
     {
@@ -156,7 +190,7 @@ export const content = {
         { value: "12+", label: "Ambassadors Led" },
       ],
       bullets: [
-        "Led 12+ ambassadors to drive 250 Leland+ signups, unlocking $7.6M in resources for 22,000 Cal Poly undergrads",
+        "Directed 12+ ambassadors to drive 250 Leland+ signups, unlocking $7.6M in resources for 22,000 Cal Poly undergrads",
         "Ranked 1st among 120+ ambassadors nationwide for student org partnerships and recruiting during a two-week sprint",
         "Analyzed student engagement data to recommend growth initiatives, informing Leland's campus expansion strategy",
       ],
@@ -178,6 +212,24 @@ export const content = {
       ],
     },
     {
+      title: "Campus Events Launcher",
+      company: "DoorDash",
+      location: "San Luis Obispo, CA",
+      dates: "Aug. 2024 – Dec. 2025",
+      logo: "/logos/doordash.jpeg",
+      photos: [] as string[],
+      stats: [
+        { value: "2,200+", label: "DashPass Signups" },
+        { value: "40+", label: "Events Executed" },
+        { value: "$10k+", label: "Market Share" },
+      ],
+      bullets: [
+        "Executed 40+ campus events, driving 2,200+ Student DashPass signups and increasing market share by over $10K",
+        "Built and maintained ongoing partnerships with 7+ student organizations, growing external signups by 12%",
+        "Maintained a cost per sale under $10 while tabling, ranking top 3 of 25+ schools in the bracket for signups",
+      ],
+    },
+    {
       title: "Area Manager Intern",
       company: "Amazon",
       location: "Tracy, CA",
@@ -189,33 +241,16 @@ export const content = {
         { value: "1,500+", label: "Items Packed/Day" },
       ],
       bullets: [
-        "Oversaw operations of 110+ associates in AFE1 maintaining individual productivity of 1,500+ items packed daily",
-        "Redesigned an upgrade box chart to address SLAM Wrong Box defects at 11,173 DPMO (1 in 90 boxes)",
+        "Oversaw operations of 110+ associates in AFE1, maintaining individual productivity of 1,500+ items packed daily",
+        "Redesigned a box-selection chart to cut mis-sized packaging errors, occurring in 1 of every 90 boxes",
         "Presented process improvement recommendations to senior operations managers, securing approval for warehouse adoption",
-      ],
-    },
-    {
-      title: "Week of Welcome Orientation Leader",
-      company: "California Polytechnic State University (Cal Poly)",
-      location: "San Luis Obispo, CA",
-      dates: "Apr. 2024 – Sep. 2024",
-      logo: "/logos/calpoly.jpeg",
-      photos: [] as string[],
-      stats: [
-        { value: "19+", label: "Freshmen Led" },
-        { value: "30+", label: "Training Hours" },
-      ],
-      bullets: [
-        "Led a group of 19+ freshmen through college orientation week, serving as representative student ambassador to the university",
-        "Attended 30+ hours of training to gain personal, professional & leadership development",
-        "Facilitated conversations on important topics about empathy and diversity, equity, & inclusion",
       ],
     },
     {
       title: "Program Director",
       company: "Skyhawks Sports Academy",
-      location: "San Francisco Bay Area",
-      dates: "Jun. 2024 – Aug. 2024",
+      location: "Pleasanton, CA",
+      dates: "Jun. 2022 – Aug. 2024",
       logo: "/logos/skyhawks.jpeg",
       photos: [] as string[],
       stats: [
@@ -242,10 +277,46 @@ export const content = {
         { value: "3,000+", label: "Students Represented" },
       ],
       bullets: [
-        "Selected as 1 of 32 students to be the external-facing student leadership group representing OCOB (3,000+ students)",
-        "Manage tours for 1,000+ prospective students and synthesize feedback to improve program effectiveness",
-        "Lead communication and coordination across digital productivity tools to enhance team efficiency",
+        "Selected as 1 of 32 students to lead OCOB's external-facing student leadership group, representing 3,000+ students",
+        "Synthesized feedback from 1,000+ prospective student tours annually to iteratively improve program effectiveness",
+        "Directed weekly meetings across eight committees, liaising with the Dean's Office to align stakeholders and drive execution",
       ],
+    },
+    {
+      title: "VP of Visitor Experience",
+      org: "Orfalea College of Business Student Ambassadors",
+      location: "San Luis Obispo, CA",
+      dates: "Apr. 2025 – May 2026",
+      logo: "/logos/ocob.jpeg",
+      stats: [
+        { value: "1,000+", label: "Prospective Students" },
+      ],
+      bullets: [
+        "Managed on-campus and virtual tours for 1,000+ prospective students using Slate, Outlook, and Gmail",
+        "Led K-12 outreach, updated tour materials, and coordinated with the Welcome Center and Dean's Office for VIP visits",
+        "Collected visitor feedback and reported insights to leadership to enhance visitor content and overall experience",
+      ],
+    },
+    {
+      title: "Student Ambassador",
+      org: "Orfalea College of Business Student Ambassadors",
+      location: "San Luis Obispo, CA",
+      dates: "Apr. 2024 – Present",
+      logo: "/logos/ocob.jpeg",
+      stats: [
+        { value: "32", label: "Ambassadors" },
+        { value: "3,000+", label: "Students Represented" },
+      ],
+      bullets: [] as string[],
+    },
+    {
+      title: "Active Member",
+      org: "Alpha Kappa Psi Business Fraternity",
+      location: "San Luis Obispo, CA",
+      dates: "Oct. 2023 – Present",
+      logo: "/logos/akpsi.jpeg",
+      stats: [],
+      bullets: [] as string[],
     },
     {
       title: "Executive Vice-President",
@@ -261,12 +332,92 @@ export const content = {
       bullets: [
         "Led executive board (17+ members) in executing professional and philanthropic initiatives for 80+ members",
         "Managed a $10K quarterly budget and provided data-driven recommendations supporting organizational strategy",
-        "Standardized internal systems and communication processes to improve collaboration and planning",
+        "Standardized internal systems and led transition to Billhighway, reducing fraud risk for dues and member payments",
+      ],
+    },
+    {
+      title: "Pledge Educator",
+      org: "Alpha Kappa Psi Business Fraternity",
+      location: "San Luis Obispo, CA",
+      dates: "Sept. 2025 – Dec. 2025",
+      logo: "/logos/akpsi.jpeg",
+      stats: [
+        { value: "16", label: "Pledges Educated" },
+        { value: "5", label: "Week Curriculum" },
+      ],
+      bullets: [
+        "Educated a 16-member pledge class on AKPsi history, ritual, and professional standards across a five week curriculum",
+        "Coordinated weekly pledge meetings, professional workshops, and brotherhood events to develop well-rounded new members",
+        "Partnered with the executive board to evaluate pledge progress and ensure successful initiation into active brotherhood",
+      ],
+    },
+    {
+      title: "Director of Brotherhood",
+      org: "Alpha Kappa Psi Business Fraternity",
+      location: "San Luis Obispo, CA",
+      dates: "Jan. 2025 – Mar. 2025",
+      logo: "/logos/akpsi.jpeg",
+      stats: [
+        { value: "80+", label: "Active Brothers" },
+        { value: "$1K", label: "Budget" },
+      ],
+      bullets: [
+        "Planned and coordinated social events for 80+ Active Brothers to strengthen relationships within the fraternity",
+        "Supervised a $1K budget with executive board members to support high-impact brotherhood events aligned with the fraternity's values and goals",
+      ],
+    },
+    {
+      title: "Co-Vice President of Marketing",
+      org: "Alpha Kappa Psi Business Fraternity",
+      location: "San Luis Obispo, CA",
+      dates: "Apr. 2024 – Dec. 2024",
+      logo: "/logos/akpsi.jpeg",
+      stats: [
+        { value: "272%", label: "Accounts Reached" },
+        { value: "75+", label: "Event Attendees" },
+        { value: "170+", label: "Interest Responses" },
+      ],
+      bullets: [
+        "Increased Instagram engagement through content creation with Canva, resulting in a 272% increase in accounts reached and a 10.1% increase in followers within three months",
+        "Organized a week-long recruiting event with 75+ attendees that included professional workshops and was sponsored by Red Bull and Celsius",
+        "Outreached to students through social media, tabling, and classroom presentations, gathering 170+ interest responses",
+      ],
+    },
+    {
+      title: "Beta Delta Pledge Class Professional Committee Chair",
+      org: "Alpha Kappa Psi Business Fraternity",
+      location: "San Luis Obispo, CA",
+      dates: "Oct. 2023 – Nov. 2023",
+      logo: "/logos/akpsi.jpeg",
+      stats: [
+        { value: "$950+", label: "Raised" },
+        { value: "5", label: "Guest Speakers" },
+      ],
+      bullets: [
+        "Orchestrated a guest speaker event featuring five industry professionals specializing in business, medicine, and engineering",
+        "Raised over $950 individually to support the pledge class over five weeks through successful fundraisers, utilizing strong networking skills",
+        "Collaborated with the rest of the pledge class to plan brotherhood, philanthropy, and fundraising events",
+      ],
+    },
+    {
+      title: "Week of Welcome Orientation Leader",
+      org: "Week of Welcome (WOW) Orientation Program",
+      location: "San Luis Obispo, CA",
+      dates: "Apr. 2024 – Sept. 2024",
+      logo: "/logos/calpoly.jpeg",
+      stats: [
+        { value: "19+", label: "Freshmen Led" },
+        { value: "30+", label: "Training Hours" },
+      ],
+      bullets: [
+        "Led a group of 19+ freshmen through college orientation week, serving as representative student ambassador to the university",
+        "Attended 30+ hours of training to gain personal, professional & leadership development",
+        "Facilitated conversations on important topics about empathy and diversity, equity, & inclusion",
       ],
     },
   ],
 
-  skills: ["Microsoft Office Suite (Excel, Outlook)", "Google Workspace", "SQL", "Python", "Tableau", "Canva", "Claude", "PowerPoint", "Slack", "Zoom"],
+  skills: ["Canva", "Claude", "Google Workspace", "Microsoft Office Suite", "Slack", "Tableau", "Zoom"],
 
   interests: [
     { name: "Calisthenics",        type: "image", src: "", photos: [] as string[], description: "I always saw people doing handstands, levers, and muscle-ups online and thought it looked crazy cool, but running took up all my time in high school. My first two years at Cal Poly I got into bodybuilding instead, and I didn't actually start training calisthenics until junior year.\n\nSince then I've been training the front lever pretty much every day (that's the skill where you hold your body flat, parallel to the ground, off a pull-up bar). I recently got my first muscle-up and I'm working on handstand push-ups now too. Honestly the hardest part isn't the skills themselves, it's just showing up on the days I'm tired or don't feel like training. Running cross country and track in high school already taught me that kind of discipline, so it's carried over pretty naturally. My goal is to have the front lever and human flag both locked in by the end of senior year." },

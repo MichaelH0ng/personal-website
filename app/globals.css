@@ -37,25 +37,6 @@ body {
   100% { background-position: 0% 50%; }
 }
 
-/* Logo marquee: pauses on hover or keyboard focus, static for reduced motion */
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-
-.marquee-track {
-  animation: marquee 45s linear infinite;
-}
-
-.marquee:hover .marquee-track,
-.marquee:focus-within .marquee-track {
-  animation-play-state: paused;
-}
-
-.marquee-static {
-  animation: none !important;
-}
-
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

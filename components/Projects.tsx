@@ -34,7 +34,7 @@ function ProjectCard({ project, i }: { project: Project; i: number }) {
       transition={{ duration: 0.4, delay: i * 0.07, ease: "easeOut" }}
       whileHover={{ y: -4, boxShadow: "0 12px 32px rgba(74,222,128,0.16)" }}
     >
-      <div className="rounded-2xl border border-green-500/30 bg-black/50 backdrop-blur-sm overflow-hidden">
+      <div className="rounded-2xl border border-green-500/30 bg-black/95 backdrop-blur-md overflow-hidden">
         <div className="h-1 bg-gradient-to-r from-green-600 to-green-400" />
         <div className="p-6">
           <p className="text-xs font-semibold uppercase tracking-widest text-green-400/70 mb-1">{project.type}</p>

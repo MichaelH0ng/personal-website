@@ -12,8 +12,8 @@ const quickLinks = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-green-500/30 bg-black/70">
-      <div className="max-w-6xl mx-auto px-6 py-16">
+    <footer className="border-t border-green-500/30 bg-black">
+      <div className="max-w-[90rem] mx-auto px-6 sm:px-10 lg:px-16 py-16">
         <div className="flex flex-col md:flex-row md:justify-between gap-12">
 
           {/* Left — Name + bio + location */}
@@ -100,7 +100,7 @@ export default function Footer() {
 
       {/* Bottom bar */}
       <div className="border-t border-green-500/20">
-        <div className="max-w-6xl mx-auto px-6 py-5 text-center">
+        <div className="max-w-[90rem] mx-auto px-6 sm:px-10 lg:px-16 py-5 text-center">
           <p className="text-xs text-subtle">© {new Date().getFullYear()} Michael Hong · All rights reserved.</p>
         </div>
       </div>

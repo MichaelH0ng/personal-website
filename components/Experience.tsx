@@ -311,7 +311,7 @@ const playfair = {
 function Haze({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
     <div className={cn("relative isolate", className)}>
-      <span className="absolute -inset-x-6 -inset-y-4 -z-10 rounded-full bg-black/55 blur-2xl" aria-hidden="true" />
+      <span className="absolute -inset-x-6 -inset-y-4 -z-10 rounded-full bg-black/80 blur-2xl" aria-hidden="true" />
       {children}
     </div>
   );

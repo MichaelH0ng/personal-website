@@ -104,7 +104,7 @@ export default function Contact() {
                 key={link.label}
                 href={link.href}
                 {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                className="flex items-center gap-5 group rounded-2xl border border-green-500/30 bg-black/55 backdrop-blur-sm px-6 py-5 transition-colors hover:border-green-400/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                className="flex items-center gap-5 group rounded-2xl border border-green-500/30 bg-black/95 backdrop-blur-md px-6 py-5 transition-colors hover:border-green-400/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                 initial={{ opacity: 0, x: 32 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 + i * 0.12 }}
